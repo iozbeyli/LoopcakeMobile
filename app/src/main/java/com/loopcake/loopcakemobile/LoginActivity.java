@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,8 +31,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -187,9 +200,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            //mAuthTask = new UserLoginTask(email, password);
-            //mAuthTask.execute((Void) null);
-            Intent intent  = new Intent(this,LoginActivity.class);
+            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask.execute((Void) null);
+            //Intent intent  = new Intent(this,LoginActivity.class);
         }
     }
 
@@ -301,7 +314,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-
+        String resultsToDisplay = "";
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -310,13 +323,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            String apiURL = "http://207.154.203.163:8000/api/login";
 
+            InputStream in = null;
             try {
+                URL url = new URL(apiURL);
+
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setDoOutput(true);
+                urlConnection.setDoInput(true);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type","application/json");
+
+                System.out.print(urlConnection.toString());
+                JSONObject loginData = new JSONObject();
+                loginData.put("email",mEmail);
+                loginData.put("password",mPassword);
+                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+                out.write(loginData.toString());
+                out.close();
+
+                urlConnection.connect();
+
+                in = new BufferedInputStream(urlConnection.getInputStream());
                 // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                //Thread.sleep(2000);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
                 return false;
             }
+
+                resultsToDisplay = getStringFromInputStream(in);
+                //to [convert][1] byte stream to a string
+                System.out.print(resultsToDisplay);
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
@@ -334,13 +374,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
+            System.out.println(resultsToDisplay);
 
-            if (success) {
+            try {
+                JSONObject jsonObject = new JSONObject(resultsToDisplay);
+                String token =  (String)jsonObject.get("token");
+                Boolean successBool = (Boolean)jsonObject.get("success");
+
+                if(successBool){
+                    Session.loggedin=true;
+                    Session.token = token;
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
+                }
+
+
+
+                Log.d("token",token);
+                Log.d("successBool",""+successBool);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            /*if (success) {
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
-            }
+            }*/
         }
 
         @Override
@@ -349,6 +411,34 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
 
+        private String getStringFromInputStream(InputStream is) {
+
+            BufferedReader br = null;
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+            try {
+
+                br = new BufferedReader(new InputStreamReader(is));
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            return sb.toString();
+
+        }
     }
 }
 
