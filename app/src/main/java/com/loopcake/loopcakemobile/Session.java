@@ -5,9 +5,9 @@ package com.loopcake.loopcakemobile;
  */
 
 public class Session {
-    static boolean loggedin = false;
-    static String token = "";
-    static User user=null;
+   public static boolean loggedin = false;
+   public static String token = "";
+   public static User user=null;
 }
 
 
