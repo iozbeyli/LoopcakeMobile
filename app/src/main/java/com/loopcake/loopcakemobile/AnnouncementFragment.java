@@ -105,7 +105,7 @@ public class AnnouncementFragment extends Fragment {
 
         progressBar = layout.findViewById(R.id.announcement_progress);
         mAuthTask = new UserLoginTask();
-       // mAuthTask.execute((Void) null);
+        mAuthTask.execute((Void) null);
 
         return layout;
     }
