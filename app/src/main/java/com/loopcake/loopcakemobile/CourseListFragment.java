@@ -46,7 +46,6 @@ public class CourseListFragment extends Fragment implements Communicator{
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private View layout;
-    private CourseListTask courseListTask;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -78,8 +77,6 @@ public class CourseListFragment extends Fragment implements Communicator{
                              Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.fragment_item_list, container, false);
 
-        courseListTask = new CourseListTask();
-        courseListTask.execute((Void) null);
         JSONObject loginData = new JSONObject();
         try {
             loginData.put("operation","3");
@@ -106,6 +103,7 @@ public class CourseListFragment extends Fragment implements Communicator{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mListener = (OnListFragmentInteractionListener) getActivity();
     }
 
     @Override
@@ -127,117 +125,6 @@ public class CourseListFragment extends Fragment implements Communicator{
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onListFragmentInteraction(CourseItem item);
-    }
-
-    public class CourseListTask extends AsyncTask<Void, Void, Boolean> {
-
-        String resultsToDisplay = "";
-        CourseListTask() {
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            String apiURL = "http://207.154.203.163:8000/api/course";
-
-            InputStream in = null;
-            try {
-                URL url = new URL(apiURL);
-
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setDoOutput(true);
-                urlConnection.setDoInput(true);
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Content-Type","application/json");
-                urlConnection.addRequestProperty("Authorization", "Bearer " + Session.token);
-                urlConnection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-
-                System.out.print(urlConnection.toString());
-                JSONObject loginData = new JSONObject();
-                loginData.put("operation","3");
-                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-                out.write(loginData.toString());
-                out.close();
-
-                urlConnection.connect();
-
-                in = new BufferedInputStream(urlConnection.getInputStream());
-                // Simulate network access.
-                //Thread.sleep(2000);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-
-                return false;
-            }
-
-            resultsToDisplay = getStringFromInputStream(in);
-            //to [convert][1] byte stream to a string
-            System.out.print(resultsToDisplay);
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            courseListTask = null;
-            //showProgress(false);
-            System.out.println(resultsToDisplay);
-
-            try {
-                JSONObject jsonObject = new JSONObject(resultsToDisplay);
-
-                Boolean successBool = (Boolean)jsonObject.get("success");
-
-                if(successBool){
-                    JSONArray courses = jsonObject.getJSONArray("details");
-                    fillCourseList(courses);
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            /*if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }*/
-        }
-
-        @Override
-        protected void onCancelled() {
-            courseListTask = null;
-          //  showProgress(false);
-        }
-
-        private String getStringFromInputStream(InputStream is) {
-
-            BufferedReader br = null;
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-            try {
-
-                br = new BufferedReader(new InputStreamReader(is));
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            return sb.toString();
-
-        }
     }
 
     public void fillCourseList(JSONArray courses){

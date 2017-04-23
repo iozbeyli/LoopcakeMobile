@@ -19,6 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.loopcake.loopcakemobile.ListContents.CourseContent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,8 +37,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,CourseListFragment.OnListFragmentInteractionListener {
 
     UserDataTask mAuthTask;
     @Override
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity
                 mAuthTask = new UserDataTask();
                 mAuthTask.execute((Void) null);
             }else{
-                setDrawerUserInfo();
+               // setDrawerUserInfo();
             }
             setContentView(R.layout.activity_main);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -128,9 +130,9 @@ public class MainActivity extends AppCompatActivity
             fragment = new AnnouncementFragment();
         } else if (id == R.id.nav_repo) {
             fragment = new RepoListFragment();
-        }/* else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_project) {
+            fragment = new ProjectListFragment();
+        }/* else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
@@ -146,6 +148,14 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onListFragmentInteraction(CourseContent.CourseItem item) {
+        Log.d("item","clicked");
+        Session.selectedCourseID = item.details;
+        Intent intent = new Intent(this,CourseActivity.class);
+        startActivity(intent);
     }
 
     public class UserDataTask extends AsyncTask<Void, Void, Boolean> {
@@ -271,9 +281,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setDrawerUserInfo(){
-        TextView email = (TextView) findViewById(R.id.drawer_user_email);
-        email.setText(Session.user.email);
-        TextView name = (TextView) findViewById(R.id.drawer_user_name);
-        name.setText(Session.user.name+" "+Session.user.surname);
+        if(Session.user!=null){
+            TextView email = (TextView) findViewById(R.id.drawer_user_email);
+            Toast.makeText(getApplicationContext(),"LAla"+Session.user.email,Toast.LENGTH_SHORT).show();
+            email.setText(""+Session.user.email);
+            TextView name = (TextView) findViewById(R.id.drawer_user_name);
+            name.setText(Session.user.name+" "+Session.user.surname);
+        }
+
     }
 }
