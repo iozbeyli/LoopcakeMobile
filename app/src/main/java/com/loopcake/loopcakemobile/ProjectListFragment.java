@@ -9,6 +9,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +65,7 @@ public class ProjectListFragment extends Fragment {
     private View progressBar;
     private ProjectListTask mAuthTask = null;
     private View layout;
+    private List<String> ids;
 
     public ProjectListFragment() {
         // Required empty public constructor
@@ -151,10 +155,12 @@ public class ProjectListFragment extends Fragment {
         groupList = new ArrayList<String>();
         dateList = new ArrayList<>();
         progressList = new ArrayList<>();
+        ids = new ArrayList<>();
         for(int i=0;i<announcements.length();i++){
             try {
                 groupList.add(announcements.getJSONObject(i).getJSONObject("project").getString("name"));
                 dateList.add(announcements.getJSONObject(i).getJSONObject("project").getString("deadline"));
+                ids.add(announcements.getJSONObject(i).getString("_id"));
                 JSONArray checklist = announcements.getJSONObject(i).getJSONArray("checklist");
                 int temp = 0;
                 for (int j = 0; j < checklist.length(); j++) {
@@ -284,6 +290,28 @@ public class ProjectListFragment extends Fragment {
                     expandableListView = (ExpandableListView) layout.findViewById(R.id.projectList);
                     final ExpandableListAdapter expListAdapter = new ExpandableListAdapter(getActivity(),groupList,dateList,laptopCollection);
                     expListAdapter.setProgress(progressList);
+                    expandableListView
+                            .setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+                                @Override
+                                public boolean onChildClick(
+                                        ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition,
+                                        long id) {
+                                    showProject(ids.get(groupPosition));
+                                    return false;
+                                }
+
+                                private void showProject(String id) {
+                                    Session.selectedID = id;
+                                    Fragment fragment = new ProjectFragment();
+                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                    ft.replace(R.id.frame_main, fragment, "visible_fragment");
+                                    ft.addToBackStack(null);
+                                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                                    ft.commit();
+                                }
+                            });
                     expandableListView.setAdapter(expListAdapter);
 
                     /*Intent intent = new Intent(getActivity().getApplicationContext(),MainActivity.class);

@@ -7,7 +7,8 @@ import java.util.List;
 
         import android.app.Activity;
         import android.app.AlertDialog;
-        import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.content.Context;
         import android.content.DialogInterface;
         import android.graphics.Typeface;
         import android.util.Log;
@@ -64,33 +65,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView item = (TextView) convertView.findViewById(R.id.announcementContent);
-
-        /*ImageView delete = (ImageView) convertView.findViewById(R.id.delete);
-        delete.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Do you want to remove?");
-                builder.setCancelable(false);
-                builder.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                List<String> child =
-                                        laptopCollections.get(laptops.get(groupPosition));
-                                child.remove(childPosition);
-                                notifyDataSetChanged();
-                            }
-                        });
-                builder.setNegativeButton("No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-        });*/
 
         item.setText(laptop);
         if(progress != null){

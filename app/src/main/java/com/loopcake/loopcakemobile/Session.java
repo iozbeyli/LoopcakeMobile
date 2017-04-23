@@ -8,6 +8,7 @@ public class Session {
    public static boolean loggedin = false;
    public static String token = "";
    public static User user=null;
+   public static String selectedID = "";
 }
 
 

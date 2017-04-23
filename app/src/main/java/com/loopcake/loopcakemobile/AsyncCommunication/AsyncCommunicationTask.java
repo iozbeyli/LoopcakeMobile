@@ -84,6 +84,8 @@ public class AsyncCommunicationTask extends AsyncTask<Void,Void,Boolean> {
 
                 if(successBool){
                     communicator.successfulExecute(jsonObject);
+                }else{
+                    communicator.failedExecute();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
