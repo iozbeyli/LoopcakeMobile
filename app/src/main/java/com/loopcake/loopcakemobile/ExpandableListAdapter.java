@@ -17,7 +17,8 @@ import java.util.List;
         import android.view.ViewGroup;
         import android.widget.BaseExpandableListAdapter;
         import android.widget.ImageView;
-        import android.widget.TextView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -25,6 +26,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Map<String, List<String>> laptopCollections;
     private List<String> laptops;
     private List<String> dates;
+    private List<Integer> progress;
 
     public ExpandableListAdapter(Activity context, List<String> laptops, List<String> dates,
                                  Map<String, List<String>> laptopCollections) {
@@ -38,9 +40,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return laptopCollections.get(laptops.get(groupPosition)).get(childPosition);
     }
 
+    public void setProgress(List<Integer> progress){
+        this.progress = progress;
+    }
+
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
     }
+
 
 
     public View getChildView(final int groupPosition, final int childPosition,
@@ -49,7 +56,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         LayoutInflater inflater = context.getLayoutInflater();
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.announcement_child_item, null);
+            if(progress == null){
+                convertView = inflater.inflate(R.layout.announcement_child_item, null);
+            }else {
+                convertView = inflater.inflate(R.layout.project_child_item, null);
+            }
         }
 
         TextView item = (TextView) convertView.findViewById(R.id.announcementContent);
@@ -82,6 +93,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         });*/
 
         item.setText(laptop);
+        if(progress != null){
+            int progress = getProgress(groupPosition);
+            ProgressBar progressItem = (ProgressBar) convertView.findViewById(R.id.projectProgressBar);
+            progressItem.setProgress(progress);
+        }
         return convertView;
     }
 
@@ -120,6 +136,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         item.setText(laptopName);
         TextView dateItem = (TextView) convertView.findViewById(R.id.announcementDate);
         dateItem.setText(date);
+
         return convertView;
     }
 
@@ -129,5 +146,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    public int getProgress(int groupPosition){
+        return progress.get(groupPosition);
     }
 }
