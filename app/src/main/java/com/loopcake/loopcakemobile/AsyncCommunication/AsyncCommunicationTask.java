@@ -1,6 +1,7 @@
 package com.loopcake.loopcakemobile.AsyncCommunication;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.loopcake.loopcakemobile.Session;
 
@@ -74,12 +75,8 @@ public class AsyncCommunicationTask extends AsyncTask<Void,Void,Boolean> {
         @Override
         protected void onPostExecute(final Boolean success) {
 
-            //showProgress(false);
-            System.out.println(resultsToDisplay);
-
             try {
                 JSONObject jsonObject = new JSONObject(resultsToDisplay);
-
                 Boolean successBool = (Boolean)jsonObject.get("success");
 
                 if(successBool){

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -304,12 +305,8 @@ public class ProjectListFragment extends Fragment {
 
                                 private void showProject(String id) {
                                     Session.selectedID = id;
-                                    Fragment fragment = new ProjectFragment();
-                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                    ft.replace(R.id.frame_main, fragment, "visible_fragment");
-                                    ft.addToBackStack(null);
-                                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                                    ft.commit();
+                                    Intent intent = new Intent(getActivity(),ProjectActivity.class);
+                                    startActivity(intent);
                                 }
                             });
                     expandableListView.setAdapter(expListAdapter);
