@@ -1,0 +1,41 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.loopcake.loopcakemobile.CourseFragments.CourseDetailFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+    <TextView
+        android:id="@+id/courseDetailTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Course Detail" />
+    <TextView
+        android:id="@+id/courseDetailCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Course Detail" />
+    <ImageView
+        android:id="@+id/courseDetailPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/courseDetailInstructorName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Course Detail" />
+    <TextView
+        android:id="@+id/courseDetailInstructorDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Course Detail" />
+    </LinearLayout>
+
+</FrameLayout>

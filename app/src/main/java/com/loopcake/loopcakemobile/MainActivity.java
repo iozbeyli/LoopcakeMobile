@@ -1,8 +1,11 @@
 package com.loopcake.loopcakemobile;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -18,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -112,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this,CourseActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -132,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = new RepoListFragment();
         } else if (id == R.id.nav_project) {
             fragment = new ProjectListFragment();
-        }/* else if (id == R.id.nav_share) {
+        }/* else if (id == R.id.nav_auth) {
 
         } else if (id == R.id.nav_send) {
 
@@ -153,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onListFragmentInteraction(CourseContent.CourseItem item) {
         Log.d("item","clicked");
-        Session.selectedCourseID = item.details;
+        Session.selectedID = item.details;
         Intent intent = new Intent(this,CourseActivity.class);
         startActivity(intent);
     }
@@ -233,6 +239,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     User user = new User(name,surname,email,type,photoID,universityID);
                     Session.user=user;
                     setDrawerUserInfo();
+                    GetUserImage userImage = new GetUserImage(photoID);
+                    userImage.execute((Void)null);
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -289,5 +298,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             name.setText(Session.user.name+" "+Session.user.surname);
         }
 
+    }
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            Log.d("image error",e.toString());
+            return null;
+        }
+    }
+    public void setUserImage(Drawable userImage){
+        ImageView iv = (ImageView) findViewById(R.id.drawer_user_photo);
+        iv.setImageDrawable(userImage);
+    }
+
+    public class GetUserImage extends AsyncTask<Void,Void,Boolean>{
+        String photoID;
+        public GetUserImage(String photoID){
+            this.photoID=photoID;
+        }
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            Drawable userImage = LoadImageFromWebOperations(Constants.apiURL+"download?_id="+photoID);
+            //setUserImage(userImage);
+            return null;
+        }
     }
 }

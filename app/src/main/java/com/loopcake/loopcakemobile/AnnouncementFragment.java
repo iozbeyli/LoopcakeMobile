@@ -63,9 +63,20 @@ public class AnnouncementFragment extends Fragment {
     private View progressBar;
     private UserLoginTask mAuthTask = null;
     private View layout;
-
+    private JSONObject postData=null;
     public AnnouncementFragment() {
         // Required empty public constructor
+    }
+
+    public void prepareForCourse(){
+        postData = new JSONObject();
+        try {
+            postData.put("course",Session.selectedID);
+            postData.put("operation","1");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -232,10 +243,12 @@ public class AnnouncementFragment extends Fragment {
                 urlConnection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 
                 System.out.print(urlConnection.toString());
-                JSONObject loginData = new JSONObject();
-                loginData.put("operation","2");
+                if(postData==null){
+                    postData=new JSONObject();
+                    postData.put("operation","2");
+                }
                 OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-                out.write(loginData.toString());
+                out.write(postData.toString());
                 out.close();
 
                 urlConnection.connect();
