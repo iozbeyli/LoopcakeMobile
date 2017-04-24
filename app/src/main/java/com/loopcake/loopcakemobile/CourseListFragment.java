@@ -83,7 +83,7 @@ public class CourseListFragment extends Fragment implements Communicator{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask("http://207.154.203.163:8000/api/course",loginData,this);
+        AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.apiURL+"course",loginData,this);
         asyncCommunicationTask.execute((Void) null);
         // Set the adapter
        /* if (layout instanceof RecyclerView) {

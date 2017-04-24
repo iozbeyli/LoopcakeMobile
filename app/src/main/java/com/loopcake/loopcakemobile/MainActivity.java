@@ -25,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
+import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.ListContents.CourseContent;
 
 import org.json.JSONArray;
@@ -41,9 +43,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,CourseListFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,CourseListFragment.OnListFragmentInteractionListener,Communicator {
 
-    UserDataTask mAuthTask;
+    AsyncCommunicationTask userDataTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,13 +56,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
         }else {
-            if(Session.user==null){
-                mAuthTask = new UserDataTask();
-                mAuthTask.execute((Void) null);
-            }else{
-               // setDrawerUserInfo();
-            }
             setContentView(R.layout.activity_main);
+            if(Session.user==null){
+                JSONObject postData = new JSONObject();
+                try {
+                    postData.put("operation","1");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                userDataTask = new AsyncCommunicationTask(Constants.apiURL+"user",postData,this);
+                userDataTask.execute((Void)null);
+            }else{
+                setDrawerUserInfo();
+            }
+
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
@@ -164,138 +173,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
-    public class UserDataTask extends AsyncTask<Void, Void, Boolean> {
-
-        String resultsToDisplay = "";
-        UserDataTask() {
+    @Override
+    public void successfulExecute(JSONObject jsonObject) {
+        JSONArray userDetailArray = null;
+        try {
+            userDetailArray = jsonObject.getJSONArray("details");
+            JSONObject userDetails = userDetailArray.getJSONObject(0);
+            String email = (String)userDetails.get("email");
+            Log.d("email",email);
+            String name = (String)userDetails.get("name");
+            Log.d("name",name);
+            String surname = (String)userDetails.get("surname");
+            Log.d("surname",surname);
+            String type = (String)userDetails.get("type");
+            Log.d("type",type);
+            String universityID = (String)userDetails.get("universityID");
+            Log.d("university",universityID);
+            String photoID = (String)userDetails.get("photo");
+            Log.d("photo",photoID);
+            User user = new User(name,surname,email,type,photoID,universityID);
+            Session.user=user;
+            setDrawerUserInfo();
+            GetUserImage userImage = new GetUserImage(photoID);
+            userImage.execute((Void)null);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            String apiURL = "http://207.154.203.163:8000/api/user";
+    }
 
-            InputStream in = null;
-            try {
-                URL url = new URL(apiURL);
+    @Override
+    public void failedExecute() {
 
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setDoOutput(true);
-                urlConnection.setDoInput(true);
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Content-Type","application/json");
-                urlConnection.addRequestProperty("Authorization", "Bearer " + Session.token);
-                urlConnection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-
-                System.out.print(urlConnection.toString());
-                JSONObject loginData = new JSONObject();
-                loginData.put("operation","1");
-                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-                out.write(loginData.toString());
-                out.close();
-
-                urlConnection.connect();
-
-                in = new BufferedInputStream(urlConnection.getInputStream());
-                // Simulate network access.
-                //Thread.sleep(2000);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-
-                return false;
-            }
-
-            resultsToDisplay = getStringFromInputStream(in);
-            //to [convert][1] byte stream to a string
-            System.out.print(resultsToDisplay);
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            System.out.println(resultsToDisplay);
-
-            try {
-                JSONObject jsonObject = new JSONObject(resultsToDisplay);
-                Boolean successBool = (Boolean)jsonObject.get("success");
-
-                if(successBool){
-                    JSONArray userDetailArray = jsonObject.getJSONArray("details");
-                    JSONObject userDetails = userDetailArray.getJSONObject(0);
-                    String email = (String)userDetails.get("email");
-                    Log.d("email",email);
-                    String name = (String)userDetails.get("name");
-                    Log.d("name",name);
-                    String surname = (String)userDetails.get("surname");
-                    Log.d("surname",surname);
-                    String type = (String)userDetails.get("type");
-                    Log.d("type",type);
-                    String universityID = (String)userDetails.get("universityID");
-                    Log.d("university",universityID);
-                    String photoID = (String)userDetails.get("photo");
-                    Log.d("photo",photoID);
-                    User user = new User(name,surname,email,type,photoID,universityID);
-                    Session.user=user;
-                    setDrawerUserInfo();
-                    GetUserImage userImage = new GetUserImage(photoID);
-                    userImage.execute((Void)null);
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            /*if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }*/
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-        }
-
-        private String getStringFromInputStream(InputStream is) {
-
-            BufferedReader br = null;
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-            try {
-
-                br = new BufferedReader(new InputStreamReader(is));
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            return sb.toString();
-
-        }
     }
 
     private void setDrawerUserInfo(){
         if(Session.user!=null){
             TextView email = (TextView) findViewById(R.id.drawer_user_email);
-            Toast.makeText(getApplicationContext(),"LAla"+Session.user.email,Toast.LENGTH_SHORT).show();
-            email.setText(""+Session.user.email);
+            if(email!=null){
+                email.setText(""+Session.user.email);
+            }
             TextView name = (TextView) findViewById(R.id.drawer_user_name);
-            name.setText(Session.user.name+" "+Session.user.surname);
+            if(name!=null){
+                name.setText(Session.user.name+" "+Session.user.surname);
+            }
+
         }
 
     }
