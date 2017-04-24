@@ -46,6 +46,7 @@ public class ListFragment extends Fragment {
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static ListFragment newInstance(List<ListItem> items) {
+
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, 1);

@@ -51,23 +51,13 @@ public class CourseActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        ArrayList<Fragment> fragments = new ArrayList<>();
-        ArrayList<String> pageTitles = new ArrayList<>();
-        fragments.add(new CourseDetailFragment());
-        AnnouncementFragment announcementFragment = new AnnouncementFragment();
-        announcementFragment.prepareForCourse();
-        fragments.add(announcementFragment);
-        CourseStudentFragment studentListFragment = new CourseStudentFragment();
-        fragments.add(studentListFragment);
-        pageTitles.add("Details");
-        pageTitles.add("Announce");
-        pageTitles.add("Students");
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),fragments,pageTitles);
+
+        mSectionsPagerAdapter = createSectionPagerAdapter();
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -108,6 +98,21 @@ public class CourseActivity extends AppCompatActivity{
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public SectionsPagerAdapter createSectionPagerAdapter(){
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        ArrayList<String> pageTitles = new ArrayList<>();
+        fragments.add(new CourseDetailFragment());
+        AnnouncementFragment announcementFragment = new AnnouncementFragment();
+        announcementFragment.prepareForCourse();
+        fragments.add(announcementFragment);
+        CourseStudentFragment studentListFragment = new CourseStudentFragment();
+        fragments.add(studentListFragment);
+        pageTitles.add("Details");
+        pageTitles.add("Announce");
+        pageTitles.add("Students");
+        return new SectionsPagerAdapter(getSupportFragmentManager(),fragments,pageTitles);
     }
 
 }
