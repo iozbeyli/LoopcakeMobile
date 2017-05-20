@@ -85,17 +85,7 @@ public class CourseListFragment extends Fragment implements Communicator{
         }
         AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.apiURL+"course",loginData,this);
         asyncCommunicationTask.execute((Void) null);
-        // Set the adapter
-       /* if (layout instanceof RecyclerView) {
-            Context context = layout.getContext();
-            RecyclerView recyclerView = (RecyclerView) layout;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(CourseContent.ITEMS, mListener));
-        }*/
+
         return layout;
     }
 
