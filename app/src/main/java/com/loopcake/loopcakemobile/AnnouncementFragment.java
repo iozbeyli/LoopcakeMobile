@@ -1,13 +1,7 @@
 package com.loopcake.loopcakemobile;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,43 +9,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ProgressBar;
+
+import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
+import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.Enumerators.Enumerators;
+import com.loopcake.loopcakemobile.PostDatas.PostDatas;
+import com.loopcake.loopcakemobile.ViewControllers.ViewController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AnnouncementFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AnnouncementFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class AnnouncementFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class AnnouncementFragment extends Fragment implements Communicator {
 
     private OnFragmentInteractionListener mListener;
 
@@ -61,61 +36,37 @@ public class AnnouncementFragment extends Fragment {
     private List<String> childList;
     private Map<String, List<String>> laptopCollection;
     private View progressBar;
-    private UserLoginTask mAuthTask = null;
+    private ViewController.LoaderController loaderController;
+    private AsyncCommunicationTask mAuthTask = null;
     private View layout;
     private JSONObject postData=null;
+    private Enumerators.AnnouncementType announcementType;
+
     public AnnouncementFragment() {
         // Required empty public constructor
     }
 
-    public void prepareForCourse(){
-        postData = new JSONObject();
-        try {
-            postData.put("course",Session.selectedID);
-            postData.put("operation","1");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AnnouncementFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static AnnouncementFragment newInstance(String param1, String param2) {
+    public static AnnouncementFragment newInstance(Enumerators.AnnouncementType type) {
         AnnouncementFragment fragment = new AnnouncementFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        fragment.announcementType= type;
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-
         layout = inflater.inflate(R.layout.fragment_announcement, container, false);
 
         progressBar = layout.findViewById(R.id.announcement_progress);
-        mAuthTask = new UserLoginTask();
+        loaderController = new ViewController.LoaderController(progressBar,getActivity());
+        loaderController.showProgress(true);
+        mAuthTask = new AsyncCommunicationTask(Constants.apiURL+"getAnnounce", PostDatas.AnnouncementPostDatas.getAnnouncementPostData(announcementType),this);
         mAuthTask.execute((Void) null);
 
         return layout;
@@ -131,18 +82,37 @@ public class AnnouncementFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-      /*  if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void successfulExecute(JSONObject jsonObject) {
+        try {
+            JSONArray announcements = jsonObject.getJSONArray("details");
+            Boolean successBool = (Boolean)jsonObject.get("success");
+            JSONObject announcement = announcements.getJSONObject(0);
+            String title = (String)announcement.get("title");
+            Log.d("title",title);
+            if(successBool){
+                createAnnouncementList(announcements);
+                createCollection(announcements);
+                expandableListView = (ExpandableListView) layout.findViewById(R.id.announcementList);
+                final ExpandableListAdapter expListAdapter = new ExpandableListAdapter(getActivity(),groupList,dateList,laptopCollection);
+                expandableListView.setAdapter(expListAdapter);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void failedExecute() {
+
     }
 
     /**
@@ -177,7 +147,6 @@ public class AnnouncementFragment extends Fragment {
         laptopCollection = new LinkedHashMap<String, List<String>>();
         for(int i=0;i<announcements.length();i++){
             try {
-
                 String title = announcements.getJSONObject(i).getString("title");
                 String content = announcements.getJSONObject(i).getString("content");
                 List<String> contentArray = new ArrayList<>();
@@ -188,155 +157,11 @@ public class AnnouncementFragment extends Fragment {
             }
         }
     }
+
     private void loadChild(String[] laptopModels) {
         childList = new ArrayList<String>();
         for (String model : laptopModels)
             childList.add(model);
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-
-            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-            progressBar.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
-    }
-
-
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        String resultsToDisplay = "";
-        UserLoginTask() {
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            String apiURL = "http://207.154.203.163:8000/api/getAnnounce";
-
-            InputStream in = null;
-            try {
-                URL url = new URL(apiURL);
-
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setDoOutput(true);
-                urlConnection.setDoInput(true);
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Content-Type","application/json");
-                urlConnection.addRequestProperty("Authorization", "Bearer " + Session.token);
-                urlConnection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-
-                System.out.print(urlConnection.toString());
-                if(postData==null){
-                    postData=new JSONObject();
-                    postData.put("operation","2");
-                }
-                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-                out.write(postData.toString());
-                out.close();
-
-                urlConnection.connect();
-
-                in = new BufferedInputStream(urlConnection.getInputStream());
-                // Simulate network access.
-                //Thread.sleep(2000);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-
-                return false;
-            }
-
-            resultsToDisplay = getStringFromInputStream(in);
-            //to [convert][1] byte stream to a string
-            System.out.print(resultsToDisplay);
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-            System.out.println(resultsToDisplay);
-
-            try {
-                JSONObject jsonObject = new JSONObject(resultsToDisplay);
-                JSONArray announcements = jsonObject.getJSONArray("details");
-                Boolean successBool = (Boolean)jsonObject.get("success");
-                JSONObject announcement = announcements.getJSONObject(0);
-                String title = (String)announcement.get("title");
-                Log.d("title",title);
-                if(successBool){
-                    createAnnouncementList(announcements);
-                    createCollection(announcements);
-                    expandableListView = (ExpandableListView) layout.findViewById(R.id.announcementList);
-                    final ExpandableListAdapter expListAdapter = new ExpandableListAdapter(getActivity(),groupList,dateList,laptopCollection);
-                    expandableListView.setAdapter(expListAdapter);
-
-                    /*Intent intent = new Intent(getActivity().getApplicationContext(),MainActivity.class);
-                    startActivity(intent);*/
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            /*if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }*/
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-
-        private String getStringFromInputStream(InputStream is) {
-
-            BufferedReader br = null;
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-            try {
-
-                br = new BufferedReader(new InputStreamReader(is));
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            return sb.toString();
-
-        }
     }
 
 }

@@ -19,6 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
+import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.PostDatas.PostDatas;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +49,7 @@ import java.util.Map;
  * Use the {@link ProjectListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProjectListFragment extends Fragment {
+public class ProjectListFragment extends Fragment implements Communicator{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -64,7 +68,7 @@ public class ProjectListFragment extends Fragment {
     private List<Integer> progressList;
     private Map<String, List<String>> laptopCollection;
     private View progressBar;
-    private ProjectListTask mAuthTask = null;
+    private AsyncCommunicationTask mAuthTask = null;
     private View layout;
     private List<String> ids;
 
@@ -107,7 +111,7 @@ public class ProjectListFragment extends Fragment {
         layout = inflater.inflate(R.layout.fragment_project_list, container, false);
 
         progressBar = layout.findViewById(R.id.announcement_progress);
-        mAuthTask = new ProjectListTask();
+        mAuthTask = new AsyncCommunicationTask(Constants.getGroupURL, PostDatas.ProjectPostDatas.getGroupPostData(),this);
         mAuthTask.execute((Void) null);
 
         return layout;
@@ -135,6 +139,54 @@ public class ProjectListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void successfulExecute(JSONObject jsonObject) {
+        try {
+            JSONArray announcements = jsonObject.getJSONArray("details");
+            Boolean successBool = (Boolean)jsonObject.get("success");
+            if(successBool){
+                createProjectList(announcements);
+                createCollection(announcements);
+
+                Log.d("hey", "onPostExecute: "+groupList);
+                Log.d("hey", "onPostExecute: "+dateList);
+                Log.d("hey", "onPostExecute: "+laptopCollection);
+                expandableListView = (ExpandableListView) layout.findViewById(R.id.projectList);
+                final ExpandableListAdapter expListAdapter = new ExpandableListAdapter(getActivity(),groupList,dateList,laptopCollection);
+                expListAdapter.setProgress(progressList);
+                expandableListView
+                        .setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+                            @Override
+                            public boolean onChildClick(
+                                    ExpandableListView parent, View v,
+                                    int groupPosition, int childPosition,
+                                    long id) {
+                                showProject(ids.get(groupPosition));
+                                return false;
+                            }
+
+                            private void showProject(String id) {
+                                Session.selectedID = id;
+                                Intent intent = new Intent(getActivity(),ProjectActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                expandableListView.setAdapter(expListAdapter);
+
+                    /*Intent intent = new Intent(getActivity().getApplicationContext(),MainActivity.class);
+                    startActivity(intent);*/
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void failedExecute() {
+
     }
 
     /**
@@ -222,142 +274,4 @@ public class ProjectListFragment extends Fragment {
         }
     }
 
-
-    public class ProjectListTask extends AsyncTask<Void, Void, Boolean> {
-
-        String resultsToDisplay = "";
-        ProjectListTask() {
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            String apiURL = "http://207.154.203.163:8000/api/getGroup";
-
-            InputStream in = null;
-            try {
-                URL url = new URL(apiURL);
-
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setDoOutput(true);
-                urlConnection.setDoInput(true);
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Content-Type","application/json");
-                urlConnection.addRequestProperty("Authorization", "Bearer " + Session.token);
-                urlConnection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-
-                System.out.print(urlConnection.toString());
-                JSONObject reqData = new JSONObject();
-                reqData.put("operation","4");
-                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-                out.write(reqData.toString());
-                out.close();
-
-                urlConnection.connect();
-
-                in = new BufferedInputStream(urlConnection.getInputStream());
-                // Simulate network access.
-                //Thread.sleep(2000);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-
-                return false;
-            }
-
-            resultsToDisplay = getStringFromInputStream(in);
-            //to [convert][1] byte stream to a string
-            System.out.print(resultsToDisplay);
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-            System.out.println(resultsToDisplay);
-
-            try {
-                JSONObject jsonObject = new JSONObject(resultsToDisplay);
-                JSONArray announcements = jsonObject.getJSONArray("details");
-                Boolean successBool = (Boolean)jsonObject.get("success");
-                if(successBool){
-                    createProjectList(announcements);
-                    createCollection(announcements);
-
-                    Log.d("hey", "onPostExecute: "+groupList);
-                    Log.d("hey", "onPostExecute: "+dateList);
-                    Log.d("hey", "onPostExecute: "+laptopCollection);
-                    expandableListView = (ExpandableListView) layout.findViewById(R.id.projectList);
-                    final ExpandableListAdapter expListAdapter = new ExpandableListAdapter(getActivity(),groupList,dateList,laptopCollection);
-                    expListAdapter.setProgress(progressList);
-                    expandableListView
-                            .setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-                                @Override
-                                public boolean onChildClick(
-                                        ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition,
-                                        long id) {
-                                    showProject(ids.get(groupPosition));
-                                    return false;
-                                }
-
-                                private void showProject(String id) {
-                                    Session.selectedID = id;
-                                    Intent intent = new Intent(getActivity(),ProjectActivity.class);
-                                    startActivity(intent);
-                                }
-                            });
-                    expandableListView.setAdapter(expListAdapter);
-
-                    /*Intent intent = new Intent(getActivity().getApplicationContext(),MainActivity.class);
-                    startActivity(intent);*/
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            /*if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }*/
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-
-        private String getStringFromInputStream(InputStream is) {
-
-            BufferedReader br = null;
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-            try {
-
-                br = new BufferedReader(new InputStreamReader(is));
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (br != null) {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            return sb.toString();
-
-        }
-    }
 }
