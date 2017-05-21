@@ -11,28 +11,7 @@ import org.json.JSONObject;
  */
 
 public class PostDatas {
-    public static class AnnouncementPostDatas{
-        public static JSONObject getAnnouncementPostData(Enumerators.AnnouncementType type){
-            JSONObject postData=new JSONObject();
-            try {
-            switch (type){
-                case STUDENT:
-                        postData.put("operation","2");
-                    break;
-                case COURSE:
-                        postData.put("course", Session.selectedID);
-                        postData.put("operation","1");
-                    break;
-                case INSTRUCTOR:
-                        postData.put("operation","2");
-                    break;
-            }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return postData;
-        }
-    }
+
     public static class ProjectPostDatas{
         public static JSONObject getGroupPostData(){
             JSONObject reqData = new JSONObject();
@@ -44,4 +23,16 @@ public class PostDatas {
             return  reqData;
         }
     }
+    public static class RepoPostDatas{
+        public static JSONObject getRepoPostData(){
+            JSONObject reqData = new JSONObject();
+            try {
+                reqData.put("operation","1");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return  reqData;
+        }
+    }
+
 }

@@ -13,7 +13,7 @@ import android.widget.ExpandableListView;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.Enumerators.Enumerators;
-import com.loopcake.loopcakemobile.PostDatas.PostDatas;
+import com.loopcake.loopcakemobile.PostDatas.AnnouncementPostDatas;
 import com.loopcake.loopcakemobile.ViewControllers.ViewController;
 
 import org.json.JSONArray;
@@ -66,7 +66,7 @@ public class AnnouncementFragment extends Fragment implements Communicator {
         progressBar = layout.findViewById(R.id.announcement_progress);
         loaderController = new ViewController.LoaderController(progressBar,getActivity());
         loaderController.showProgress(true);
-        mAuthTask = new AsyncCommunicationTask(Constants.apiURL+"getAnnounce", PostDatas.AnnouncementPostDatas.getAnnouncementPostData(announcementType),this);
+        mAuthTask = new AsyncCommunicationTask(Constants.apiURL+"getAnnounce", AnnouncementPostDatas.getAnnouncementPostData(announcementType),this);
         mAuthTask.execute((Void) null);
 
         return layout;

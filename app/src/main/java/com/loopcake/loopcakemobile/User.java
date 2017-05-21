@@ -5,6 +5,7 @@ package com.loopcake.loopcakemobile;
  */
 
 public class User {
+    public String id;
     public String name;
     public String surname;
     public String email;
@@ -20,6 +21,9 @@ public class User {
         this.type=type;
         this.photoID=photoID;
         this.universityID=universityID;
+    }
+    public User(){
+
     }
 
     public void setRepos(String[] repos){

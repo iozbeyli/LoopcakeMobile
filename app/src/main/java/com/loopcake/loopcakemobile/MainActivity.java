@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.Enumerators.Enumerators;
-import com.loopcake.loopcakemobile.ListContents.CourseContent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +32,7 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,CourseListFragment.OnListFragmentInteractionListener,Communicator {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,Communicator {
 
     AsyncCommunicationTask userDataTask;
     @Override
@@ -137,11 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = new RepoListFragment();
         } else if (id == R.id.nav_project) {
             fragment = new ProjectListFragment();
-        }/* else if (id == R.id.nav_auth) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
+        }
         else{
             fragment = new AnnouncementFragment();
         }
@@ -153,14 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onListFragmentInteraction(CourseContent.CourseItem item) {
-        Log.d("item","clicked");
-        Session.selectedID = item.details;
-        Intent intent = new Intent(this,CourseActivity.class);
-        startActivity(intent);
     }
 
     @Override
