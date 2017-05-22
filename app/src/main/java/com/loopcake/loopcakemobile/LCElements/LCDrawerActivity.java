@@ -36,6 +36,7 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
     protected DrawerLayout drawerLayout;
     protected ActionBarDrawerToggle actionBarDrawerToggle;
     protected NavigationView navigationView;
+    protected View headerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +68,7 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
 
             navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
+            headerView=navigationView.getHeaderView(0);
 
             onCreateFunction();
         }

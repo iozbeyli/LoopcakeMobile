@@ -43,35 +43,6 @@ public class MainActivity extends LCDrawerActivity implements NavigationView.OnN
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        Fragment fragment;
-        if (id == R.id.nav_course) {
-            fragment = new CourseListFragment();
-        } else if (id == R.id.nav_home) {
-            fragment = new AnnouncementFragment();
-        } else if (id == R.id.nav_repo) {
-            fragment = new RepoListFragment();
-        } else if (id == R.id.nav_project) {
-            fragment = new ProjectListFragment();
-        }else if(id == R.id.nav_auth){
-            fragment = new TwoFactorAuthenticationFragment();
-        }else{
-            fragment = new AnnouncementFragment();
-        }
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_main, fragment, "visible_fragment");
-        ft.addToBackStack(null);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
     @Override
     public void successfulExecute(JSONObject jsonObject) {
         JSONArray userDetailArray = null;
@@ -79,17 +50,11 @@ public class MainActivity extends LCDrawerActivity implements NavigationView.OnN
             userDetailArray = jsonObject.getJSONArray("details");
             JSONObject userDetails = userDetailArray.getJSONObject(0);
             String email = (String)userDetails.get("email");
-            Log.d("email",email);
             String name = (String)userDetails.get("name");
-            Log.d("name",name);
             String surname = (String)userDetails.get("surname");
-            Log.d("surname",surname);
             String type = (String)userDetails.get("type");
-            Log.d("type",type);
             String universityID = (String)userDetails.get("universityID");
-            Log.d("university",universityID);
             String photoID = (String)userDetails.get("photo");
-            Log.d("photo",photoID);
             User user = new User(name,surname,email,type,photoID,universityID);
             Session.user=user;
             setDrawerUserInfo();
@@ -108,15 +73,10 @@ public class MainActivity extends LCDrawerActivity implements NavigationView.OnN
 
     private void setDrawerUserInfo(){
         if(Session.user!=null){
-            TextView email = (TextView) findViewById(R.id.drawer_user_email);
-            if(email!=null){
-                email.setText(""+Session.user.email);
-            }
-            TextView name = (TextView) findViewById(R.id.drawer_user_name);
-            if(name!=null){
-                name.setText(Session.user.name+" "+Session.user.surname);
-            }
-
+            TextView email = (TextView) headerView.findViewById(R.id.drawer_user_email);
+            email.setText(Session.user.email);
+            TextView name = (TextView) headerView.findViewById(R.id.drawer_user_name);
+            name.setText(Session.user.name+" "+Session.user.surname);
         }
 
     }
