@@ -3,6 +3,7 @@ package com.loopcake.loopcakemobile;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.View;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
@@ -16,8 +17,17 @@ import java.util.ArrayList;
 public class ProjectActivity extends LCTabbedActivity implements Communicator {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreateFunction() {
+        ArrayList<String> fabTexts = new ArrayList<>();
+        fabTexts.add("Naber");
+        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
+        listeners.add(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("faa","a");
+            }
+        });
+        setSubFabs(fabTexts,listeners);
         AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getGroupURL, GroupPostDatas.getGroupDetailsPostData(),this);
         asyncCommunicationTask.execute((Void) null);
     }
