@@ -1,5 +1,6 @@
 package com.loopcake.loopcakemobile;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
@@ -16,12 +17,16 @@ public class CourseActivity extends LCTabbedActivity {
     @Override
     public void onCreateFunction() {
         ArrayList<String> fabTexts = new ArrayList<>();
-        fabTexts.add("Naber");
+        fabTexts.add("Create Announcement");
         ArrayList<View.OnClickListener> listeners = new ArrayList<>();
         listeners.add(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("faa","a");
+                CreateAnnouncementFragment caf = new CreateAnnouncementFragment();
+                Intent in = new Intent(CourseActivity.this, SubCourseActivity.class);
+                in.putExtra("fragment", Enumerators.CourseActions.CREATE_ANNOUNCEMENT);
+                in.putExtra("courseName", Session.selectedCourse.title);
+                startActivity(in);
             }
         });
         setSubFabs(fabTexts,listeners);
@@ -29,6 +34,7 @@ public class CourseActivity extends LCTabbedActivity {
 
     @Override
     public SectionsPagerAdapter createSectionPagerAdapter(){
+        setTitle(Session.selectedCourse.title);
         ArrayList<Fragment> fragments = new ArrayList<>();
         ArrayList<String> pageTitles = new ArrayList<>();
         fragments.add(new CourseDetailFragment());

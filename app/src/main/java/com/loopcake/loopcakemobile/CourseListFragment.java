@@ -32,6 +32,7 @@ public class CourseListFragment extends LCListFragment<Course> implements Commun
     public void listItemPressed(Course listItem) {
         Log.d("item","clicked");
         Session.selectedID = listItem.details;
+        Session.selectedCourse=listItem;
         Intent intent = new Intent(getActivity(),CourseActivity.class);
         startActivity(intent);
     }
