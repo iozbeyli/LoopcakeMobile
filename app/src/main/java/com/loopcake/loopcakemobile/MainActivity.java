@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.Enumerators.Enumerators;
+import com.loopcake.loopcakemobile.TwoFactorAuthentication.TwoFactorAuthenticationFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -136,8 +137,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = new RepoListFragment();
         } else if (id == R.id.nav_project) {
             fragment = new ProjectListFragment();
-        }
-        else{
+        }else if(id == R.id.nav_auth){
+            fragment = new TwoFactorAuthenticationFragment();
+        }else{
             fragment = new AnnouncementFragment();
         }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
