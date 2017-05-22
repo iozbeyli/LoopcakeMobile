@@ -31,4 +31,18 @@ public class AnnouncementPostDatas{
         }
         return postData;
     }
+
+    public static JSONObject createAnnouncementPostData(String title, String content){
+        JSONObject postData=new JSONObject();
+        try {
+            postData.put("title",title);
+            postData.put("content",content);
+            postData.put("course",Session.selectedID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return postData;
+
+    }
 }

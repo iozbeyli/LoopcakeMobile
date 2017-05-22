@@ -1,5 +1,7 @@
 package com.loopcake.loopcakemobile;
 
+import com.loopcake.loopcakemobile.LCList.LCListItems.Course;
+
 import org.json.JSONObject;
 
 /**
@@ -12,6 +14,7 @@ public class Session {
    public static User user=null;
    public static String selectedID = "";
    public static JSONObject selectedProject;
+   public static Course selectedCourse;
 }
 
 
