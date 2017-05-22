@@ -1,5 +1,6 @@
 package com.loopcake.loopcakemobile;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.LCList.LCListFragment;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
 import com.loopcake.loopcakemobile.PostDatas.PostDatas;
+import com.loopcake.loopcakemobile.PostDatas.RepoPostDatas;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,19 +25,21 @@ public class RepoListFragment extends LCListFragment<Repo> implements Communicat
 
     @Override
     protected void fillList() {
-        AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, PostDatas.RepoPostDatas.getRepoPostData(),this);
+        AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, RepoPostDatas.getRepoListPostData(),this);
         asyncCommunicationTask.execute((Void) null);
     }
 
     @Override
     public void listItemPressed(Repo listItem) {
-
+        Session.selectedRepo=listItem;
+        Intent intent = new Intent(getActivity(),RepoActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void setItemContent(Repo item, View itemView) {
         TextView text = (TextView) itemView.findViewById(R.id.content);
-        text.setText(item.content);
+        text.setText(item.repoName);
     }
 
     public void successfulExecute(JSONObject jsonObject){

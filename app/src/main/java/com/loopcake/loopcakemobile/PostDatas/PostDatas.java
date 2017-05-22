@@ -23,16 +23,6 @@ public class PostDatas {
             return  reqData;
         }
     }
-    public static class RepoPostDatas{
-        public static JSONObject getRepoPostData(){
-            JSONObject reqData = new JSONObject();
-            try {
-                reqData.put("operation","1");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return  reqData;
-        }
-    }
+
 
 }

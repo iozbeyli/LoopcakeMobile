@@ -5,18 +5,22 @@ package com.loopcake.loopcakemobile.LCList.LCListItems;
  */
 
 public class Repo {
-    public final String id;
-    public final String content;
-    public final String details;
+    public final String position;
+    public final String repoName;
+    public final String repoID;
 
-    public Repo(String id, String content, String details) {
-        this.id = id;
-        this.content = content;
-        this.details = details;
+    public Repo(String position, String repoName, String repoID) {
+        this.position = position;
+        this.repoName = repoName;
+        this.repoID = repoID;
     }
 
     @Override
     public String toString() {
-        return content;
+        return "Repo{" +
+                "position='" + position + '\'' +
+                ", repoName='" + repoName + '\'' +
+                ", repoID='" + repoID + '\'' +
+                '}';
     }
 }

@@ -1,5 +1,9 @@
 package com.loopcake.loopcakemobile;
 
+import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
+
+import java.util.ArrayList;
+
 /**
  * Created by Melih on 22.04.2017.
  */
@@ -12,7 +16,16 @@ public class User {
     public String type;
     public String photoID;
     public String universityID;
-    public String[] repos;
+
+    public ArrayList<Repo> getRepos() {
+        return repos;
+    }
+
+    public void setRepos(ArrayList<Repo> repos) {
+        this.repos = repos;
+    }
+
+    public ArrayList<Repo> repos;
 
     public User(String name,String surname,String email,String type,String photoID,String universityID){
         this.name=name;
@@ -26,7 +39,4 @@ public class User {
 
     }
 
-    public void setRepos(String[] repos){
-        this.repos =repos;
-    }
 }

@@ -1,8 +1,13 @@
 package com.loopcake.loopcakemobile.RepoFragments;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.loopcake.loopcakemobile.LCFragment.LCFragment;
@@ -14,34 +19,44 @@ import com.loopcake.loopcakemobile.R;
 
 public class RepoCodeFragment extends LCFragment {
 
-    WebView webView;
-    JavascriptInterface JSInterface;
-
+    private WebView webView;
+    private String code = "// It starts out in plain text mode,\n#  use the control below to load and apply a mode\n'you'll see the highlighting of' this text /*change*/.";
+    private String filename="x.ja";
     public RepoCodeFragment(){
         layoutID = R.layout.fragment_repo_code;
+    }
+
+    public RepoCodeFragment newInstance(String filename,String code){
+        RepoCodeFragment instance = new RepoCodeFragment();
+        instance.code=code;
+        instance.filename=filename;
+        return instance;
     }
 
     @Override
     public void mainFunction() {
         webView = (WebView) layout.findViewById(R.id.repo_code_web_view);
+        webView.setWebChromeClient(new WebChromeClient() {});
         webView.getSettings().setJavaScriptEnabled(true);
-
-        webView.addJavascriptInterface(new WebAppInterface(getActivity()), "android");
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.addJavascriptInterface(new JavaScriptInterface(getActivity()), "Android");
         webView.loadUrl("file:///android_asset/repoCodeEditor.html");
     }
 
-    public class WebAppInterface {
+    public class JavaScriptInterface {
         Context mContext;
-
-        /** Instantiate the interface and set the context */
-        WebAppInterface(Context c) {
+        JavaScriptInterface(Context c) {
             mContext = c;
         }
-
-        /** Show a toast from the web page */
         @JavascriptInterface
-        public void showToast(String toast) {
-            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+        public String getFromAndroid() {
+            return code;
+        }
+        @JavascriptInterface
+        public String getFilename() {
+            return "x.java";
         }
     }
 }

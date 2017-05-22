@@ -1,8 +1,11 @@
 package com.loopcake.loopcakemobile;
 
 import com.loopcake.loopcakemobile.LCList.LCListItems.Course;
+import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by Melih on 22.04.2017.
@@ -15,6 +18,7 @@ public class Session {
    public static String selectedID = "";
    public static JSONObject selectedProject;
    public static Course selectedCourse;
+   public static Repo selectedRepo;
 }
 
 

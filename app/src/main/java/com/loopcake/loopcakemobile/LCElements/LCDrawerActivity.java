@@ -182,8 +182,8 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
         } else if (id == R.id.nav_home) {
             fragment = new AnnouncementFragment();
         } else if (id == R.id.nav_repo) {
-            //fragment = new RepoListFragment();
-            fragment=new RepoCodeFragment();
+            fragment = new RepoListFragment();
+            //fragment=new RepoCodeFragment();
         } else if (id == R.id.nav_project) {
             fragment = new ProjectListFragment();
         }else if(id == R.id.nav_auth){
