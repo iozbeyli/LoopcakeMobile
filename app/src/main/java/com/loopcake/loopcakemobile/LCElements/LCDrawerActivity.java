@@ -25,6 +25,7 @@ import com.loopcake.loopcakemobile.CourseListFragment;
 import com.loopcake.loopcakemobile.LoginActivity;
 import com.loopcake.loopcakemobile.ProjectListFragment;
 import com.loopcake.loopcakemobile.R;
+import com.loopcake.loopcakemobile.RepoFragments.RepoCodeFragment;
 import com.loopcake.loopcakemobile.RepoListFragment;
 import com.loopcake.loopcakemobile.Session;
 import com.loopcake.loopcakemobile.TwoFactorAuthentication.TwoFactorAuthenticationFragment;
@@ -181,7 +182,8 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
         } else if (id == R.id.nav_home) {
             fragment = new AnnouncementFragment();
         } else if (id == R.id.nav_repo) {
-            fragment = new RepoListFragment();
+            //fragment = new RepoListFragment();
+            fragment=new RepoCodeFragment();
         } else if (id == R.id.nav_project) {
             fragment = new ProjectListFragment();
         }else if(id == R.id.nav_auth){

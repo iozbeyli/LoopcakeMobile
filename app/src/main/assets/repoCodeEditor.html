@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+  <link rel="stylesheet" href="file:///android_asset/codemirror-5.26.0/lib/codemirror.css">
+  <link rel="stylesheet" href="file:///android_asset/codemirror-5.26.0/theme/monokai.css">
+  <!--<input type="button" value="Say hello" onClick="showAndroidToast('Hello Android!')" />-->
+  <textarea id="code" name="code">
+    <!-- Create a simple CodeMirror instance -->
+      <link rel="stylesheet" href="lib/codemirror.css">
+
+      <script src="lib/codemirror.js"></script>
+      <script>
+        var editor = CodeMirror.fromTextArea(myTextarea, {
+          lineNumbers: true
+        });
+        </script>
+    </textarea>
+  <script type="text/javascript">
+      function showAndroidToast(toast) {
+          Android.showToast(toast);
+      }
+  </script>
+
+  <script src="file:///android_asset/codemirror-5.26.0/lib/codemirror.js"></script>
+  <script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+      lineNumbers: true
+  });
+    editor.setOption("theme", "monokai");
+</script>
+
+</body>
+</html>
