@@ -9,14 +9,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/announcement"
+            android:id="@+id/project_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="25dp"
             android:layout_weight="1"
             />
         <TextView
-            android:id="@+id/announcementDate"
+            android:id="@+id/project_deadline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

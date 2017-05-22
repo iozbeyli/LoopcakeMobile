@@ -1,50 +1,27 @@
 package com.loopcake.loopcakemobile;
 
-import android.content.Context;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.Enumerators.Enumerators;
+import com.loopcake.loopcakemobile.LCExpandableList.Announcement;
+import com.loopcake.loopcakemobile.LCExpandableList.LCExpandableFragment;
 import com.loopcake.loopcakemobile.PostDatas.AnnouncementPostDatas;
-import com.loopcake.loopcakemobile.ViewControllers.ViewController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 
-public class AnnouncementFragment extends Fragment implements Communicator {
+public class AnnouncementFragment extends LCExpandableFragment<Announcement> implements Communicator{
 
-    private OnFragmentInteractionListener mListener;
-
-    private ExpandableListView expandableListView;
-    private List<String> groupList;
-    private List<String> dateList;
-    private List<String> childList;
-    private Map<String, List<String>> laptopCollection;
-    private View progressBar;
-    private ViewController.LoaderController loaderController;
     private AsyncCommunicationTask mAuthTask = null;
-    private View layout;
-    private JSONObject postData=null;
-    private Enumerators.AnnouncementType announcementType;
-
-    public AnnouncementFragment() {
-        // Required empty public constructor
-    }
+    private Enumerators.AnnouncementType announcementType= Enumerators.AnnouncementType.STUDENT;
 
     // TODO: Rename and change types and number of parameters
     public static AnnouncementFragment newInstance(Enumerators.AnnouncementType type) {
@@ -54,40 +31,34 @@ public class AnnouncementFragment extends Fragment implements Communicator {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        layout = inflater.inflate(R.layout.fragment_announcement, container, false);
-
-        progressBar = layout.findViewById(R.id.announcement_progress);
-        loaderController = new ViewController.LoaderController(progressBar,getActivity());
+    public void fillList() {
         loaderController.showProgress(true);
-        mAuthTask = new AsyncCommunicationTask(Constants.apiURL+"getAnnounce", AnnouncementPostDatas.getAnnouncementPostData(announcementType),this);
+        mAuthTask = new AsyncCommunicationTask(Constants.getAnnounceURL, AnnouncementPostDatas.getAnnouncementPostData(announcementType),this);
         mAuthTask.execute((Void) null);
-
-        return layout;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void setGroupView(View groupView, Announcement item) {
+        TextView title = (TextView)groupView.findViewById(R.id.announcement);
+        TextView date = (TextView)groupView.findViewById(R.id.announcementDate);
+        title.setText(item.title);
+        date.setText(item.date);
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void setChildView(View childView, Announcement item) {
+        TextView content = (TextView) childView.findViewById(R.id.announcementContent);
+        content.setText(item.details);
+    }
+
+    @Override
+    public void onChildClicked(Announcement item) {
+
+    }
+
+    @Override
+    public void onGroupClicked(Announcement item) {
+
     }
 
     @Override
@@ -100,10 +71,7 @@ public class AnnouncementFragment extends Fragment implements Communicator {
             Log.d("title",title);
             if(successBool){
                 createAnnouncementList(announcements);
-                createCollection(announcements);
-                expandableListView = (ExpandableListView) layout.findViewById(R.id.announcementList);
-                final ExpandableListAdapter expListAdapter = new ExpandableListAdapter(getActivity(),groupList,dateList,laptopCollection);
-                expandableListView.setAdapter(expListAdapter);
+                displayList(R.layout.announcement_group_item,R.layout.announcement_child_item);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -115,53 +83,20 @@ public class AnnouncementFragment extends Fragment implements Communicator {
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
     private void createAnnouncementList(JSONArray announcements) {
-        groupList = new ArrayList<String>();
-        dateList = new ArrayList<>();
+        items =new ArrayList<>();
         for(int i=0;i<announcements.length();i++){
             try {
-                groupList.add(announcements.getJSONObject(i).getString("title"));
-                dateList.add(announcements.getJSONObject(i).getString("date"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void createCollection(JSONArray announcements) {
-        laptopCollection = new LinkedHashMap<String, List<String>>();
-        for(int i=0;i<announcements.length();i++){
-            try {
-                String title = announcements.getJSONObject(i).getString("title");
+                String title =announcements.getJSONObject(i).getString("title");
+                String date = announcements.getJSONObject(i).getString("date");
                 String content = announcements.getJSONObject(i).getString("content");
-                List<String> contentArray = new ArrayList<>();
-                contentArray.add(content);
-                laptopCollection.put(title,contentArray);
+                Announcement announcement = new Announcement(title,date,content);
+                items.add(announcement);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void loadChild(String[] laptopModels) {
-        childList = new ArrayList<String>();
-        for (String model : laptopModels)
-            childList.add(model);
+        loaderController.showProgress(false);
     }
 
 }

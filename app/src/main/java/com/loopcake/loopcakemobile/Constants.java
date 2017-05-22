@@ -10,4 +10,5 @@ public class Constants {
     public final static String getRepoURL = apiURL+"getRepo";
     public final static String getCourseURL = apiURL+"course";
     public final static String getStudentURL = apiURL+"getStudents";
+    public final static String getAnnounceURL = apiURL+"getAnnounce";
 }

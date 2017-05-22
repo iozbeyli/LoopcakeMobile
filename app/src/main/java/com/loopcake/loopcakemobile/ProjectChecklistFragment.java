@@ -35,7 +35,7 @@ public class ProjectChecklistFragment extends LCListFragment<ChecklistItem>{
             e.printStackTrace();
         }
 
-        displayList(items,R.layout.fragment_projectchecklist);
+        displayList(items,R.layout.fragment_project_checklist);
     }
 
 

@@ -11,12 +11,12 @@
         style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/projectProgressBar"
+        android:id="@+id/project_progress_bar"
         android:layout_weight="0.04"
         android:progress="0" />
 
     <TextView
-        android:id="@+id/announcementContent"
+        android:id="@+id/project_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.91"
