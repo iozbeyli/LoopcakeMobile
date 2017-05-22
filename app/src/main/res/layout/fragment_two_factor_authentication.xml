@@ -26,6 +26,7 @@
             />
 
         <TextView
+            android:id="@+id/pinText"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:textSize="60dp"
@@ -69,6 +70,7 @@
             android:layout_height="30dp"
             />
         <Button
+            android:id="@+id/generatePINButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Generate Authentıcatıon PIN"

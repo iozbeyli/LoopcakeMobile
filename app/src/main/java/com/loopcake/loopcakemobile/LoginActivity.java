@@ -339,6 +339,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 JSONObject loginData = new JSONObject();
                 loginData.put("email",mEmail);
                 loginData.put("password",mPassword);
+                loginData.put("mobileLogin",true);
                 OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
                 out.write(loginData.toString());
                 out.close();

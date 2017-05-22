@@ -7,6 +7,7 @@ public class ProjectAttachmentFragment extends LCFragment {
 
     public ProjectAttachmentFragment() {
         // Required empty public constructor
+        layoutID = R.layout.fragment_project_attachment;
     }
 
     @Override
