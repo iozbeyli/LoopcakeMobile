@@ -47,7 +47,7 @@ public class CourseDetailFragment extends LCFragment implements Communicator{
             String code = course.getString("code");
             String instructor = course.getString("instructor");
             if(!course.isNull("details"))               details = course.getString("details");
-            if(!course.isNull("programmingLanguages"))  langs = course.getString("programmingLanguages");
+            if(!course.isNull("programmingLanguage"))  langs = course.getString("programmingLanguage");
             Session.selectedCourse.code = code;
             Session.selectedCourse.instructor = instructor;
             Session.selectedCourse.details = details;
@@ -57,6 +57,10 @@ public class CourseDetailFragment extends LCFragment implements Communicator{
             courseNameView.setText(courseName);
             TextView codeView = (TextView)layout.findViewById(R.id.courseDetailCode);
             codeView.setText(code);
+            TextView instructorName = (TextView)layout.findViewById(R.id.courseDetailInstructorName);
+            instructorName.setText(details);
+            TextView instructorDetails = (TextView)layout.findViewById(R.id.courseDetailInstructorDetails);
+            instructorDetails.setText(langs);
         } catch (JSONException e) {
             e.printStackTrace();
         }
