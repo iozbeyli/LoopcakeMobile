@@ -22,7 +22,7 @@ public class CourseActivity extends LCTabbedActivity {
 
     @Override
     public SectionsPagerAdapter createSectionPagerAdapter(){
-        setTitle(Session.selectedCourse.title);
+        setTitle(Session.selectedCourse.name);
         ArrayList<Fragment> fragments = new ArrayList<>();
         ArrayList<String> pageTitles = new ArrayList<>();
         fragments.add(new CourseDetailFragment());
@@ -38,47 +38,62 @@ public class CourseActivity extends LCTabbedActivity {
 
     @Override
     public ArrayList<ArrayList<String>> setTextListsForFragments() {
-        ArrayList<ArrayList<String>> fragmentTextLists=new ArrayList<>();
-        ArrayList<String> fabTexts = new ArrayList<>();
-        fabTexts.add("Create Project");
-        ArrayList<String> fabTexts2 = new ArrayList<>();
-        fabTexts2.add("Create Announcement");
-        fragmentTextLists.add(fabTexts);
-        fragmentTextLists.add(fabTexts2);
-        fragmentTextLists.add(fabTexts);
-        return fragmentTextLists;
+        return createFABTexts(new String[][]{
+                {"Edit Course", "Create Project", null},
+                {"Create Announcement", null, null},
+                {null, null, null}
+        });
 
     }
 
     @Override
     public ArrayList<ArrayList<View.OnClickListener>> setListenerListsForFragments() {
+        return createFABListeners(new Enumerators.CourseActions[][]{
+                {Enumerators.CourseActions.EDIT_COURSE, Enumerators.CourseActions.CREATE_PROJECT, null},
+                {Enumerators.CourseActions.CREATE_ANNOUNCEMENT, null, null},
+                {null, null, null}
+        });
+    }
+
+    private View.OnClickListener createFABListener(final Enumerators.CourseActions act){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(CourseActivity.this, SubCourseActivity.class);
+                in.putExtra("fragment", act);
+                startActivity(in);
+            }
+        };
+    }
+
+    private ArrayList<ArrayList<View.OnClickListener>> createFABListeners(Enumerators.CourseActions[][] act){
         ArrayList<ArrayList<View.OnClickListener>> fragmentListenerLists = new ArrayList<>();
-        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
-        listeners.add(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateAnnouncementFragment caf = new CreateAnnouncementFragment();
-                Intent in = new Intent(CourseActivity.this, SubCourseActivity.class);
-                in.putExtra("fragment", Enumerators.CourseActions.CREATE_PROJECT);
-                in.putExtra("courseName", Session.selectedCourse.title);
-                startActivity(in);
+        for (int i = 0; i < 3 ; i++) {
+            ArrayList<View.OnClickListener> listeners = new ArrayList<>();
+            for (int j = 0; j < 3 ; j++) {
+                if(act[i][j] != null)
+                    listeners.add(createFABListener(act[i][j]));
             }
-        });
-        ArrayList<View.OnClickListener> listeners2 = new ArrayList<>();
-        listeners2.add(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateAnnouncementFragment caf = new CreateAnnouncementFragment();
-                Intent in = new Intent(CourseActivity.this, SubCourseActivity.class);
-                in.putExtra("fragment", Enumerators.CourseActions.CREATE_ANNOUNCEMENT);
-                in.putExtra("courseName", Session.selectedCourse.title);
-                startActivity(in);
-            }
-        });
-        fragmentListenerLists.add(listeners);
-        fragmentListenerLists.add(listeners2);
-        fragmentListenerLists.add(listeners);
+            fragmentListenerLists.add(listeners);
+        }
         return fragmentListenerLists;
     }
+
+
+    private ArrayList<ArrayList<String>> createFABTexts(String[][] lab){
+        ArrayList<ArrayList<String>> labelList = new ArrayList<>();
+        for (int i = 0; i < 3 ; i++) {
+            ArrayList<String> labels = new ArrayList<>();
+            for (int j = 0; j < 3 ; j++) {
+                if(lab[i][j] != null)
+                    labels.add(lab[i][j]);
+            }
+            labelList.add(labels);
+        }
+
+        return labelList;
+    }
+
+
 
 }

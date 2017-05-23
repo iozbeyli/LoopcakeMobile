@@ -7,6 +7,7 @@
 .DS_Store
 /build
 /captures
+/slideDateTimePicker
 .externalNativeBuild
 
 slideDateTimePicker/build/intermediates/blame/res/androidTest/debug/single/layout.json

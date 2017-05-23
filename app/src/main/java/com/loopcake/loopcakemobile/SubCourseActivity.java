@@ -34,6 +34,8 @@ public class SubCourseActivity extends AppCompatActivity {
             case CREATE_PROJECT:
                 fra = new CreateProjectFragment();
                 break;
+            case EDIT_COURSE:
+                fra = new EditCourseFragment();
             default:
                 Log.wtf(TAG, "unknown course action");
         }

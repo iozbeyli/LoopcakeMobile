@@ -1,5 +1,6 @@
 package com.loopcake.loopcakemobile.PostDatas;
 
+import com.loopcake.loopcakemobile.LCList.LCListItems.Course;
 import com.loopcake.loopcakemobile.Session;
 
 import org.json.JSONException;
@@ -27,5 +28,19 @@ public class CoursePostDatas {
             e.printStackTrace();
         }
         return  postData;
+    }
+
+    public static JSONObject getCoursePostData(Course course){
+        JSONObject reqData = new JSONObject();
+        try {
+            reqData.put("name",course.name);
+            reqData.put("code",course.code);
+            reqData.put("details",course.details);
+            reqData.put("langs",course.langs);
+            reqData.put("courseid",course.courseid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  reqData;
     }
 }

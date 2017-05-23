@@ -31,7 +31,7 @@ public class CourseListFragment extends LCListFragment<Course> implements Commun
     @Override
     public void listItemPressed(Course listItem) {
         Log.d("item","clicked");
-        Session.selectedID = listItem.details;
+        Session.selectedID = listItem.courseid;
         Session.selectedCourse=listItem;
         Intent intent = new Intent(getActivity(),CourseActivity.class);
         startActivity(intent);
@@ -40,7 +40,7 @@ public class CourseListFragment extends LCListFragment<Course> implements Commun
     @Override
     public void setItemContent(Course item, View itemView) {
         TextView content =(TextView) itemView.findViewById(R.id.content);
-        content.setText(item.title);
+        content.setText(item.name);
     }
 
     public void fillCourseList(JSONArray courses){
@@ -51,7 +51,7 @@ public class CourseListFragment extends LCListFragment<Course> implements Commun
                 course = courses.getJSONObject(i);
                 String courseTitle = course.getString("name");
                 String courseID = course.getString("_id");
-                courseList.add(new Course(""+i,courseTitle,courseID));
+                courseList.add(new Course(""+i,courseTitle,courseID,"","","",""));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
