@@ -70,7 +70,7 @@ public class CreateProjectFragment extends LCFragment {
                 try {
                     post.put("name", name);
                     post.put("details", detail);
-                    post.put("courseID", Session.selectedCourse.details);
+                    post.put("courseID", Session.selectedCourse.courseid);
                     post.put("maxGroupSize",maxGroupSize);
                 } catch (JSONException e) {e.printStackTrace();}
 

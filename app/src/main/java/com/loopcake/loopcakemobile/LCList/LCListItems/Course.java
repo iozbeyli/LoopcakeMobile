@@ -5,18 +5,26 @@ package com.loopcake.loopcakemobile.LCList.LCListItems;
  */
 
 public class Course {
-    public final String id;
-    public final String title;
-    public final String details;
+    public String id;
+    public String name;
+    public String courseid;
+    public String code;
+    public String langs;
+    public String details;
+    public String instructor;
 
-    public Course(String id, String title, String details) {
+    public Course(String id, String name, String courseid, String code, String langs, String details, String instructor) {
         this.id = id;
-        this.title = title;
+        this.name = name;
+        this.courseid = courseid;
+        this.code = code;
+        this.langs = langs;
         this.details = details;
+        this.instructor = instructor;
     }
 
     @Override
     public String toString() {
-        return title;
+        return name;
     }
 }

@@ -37,7 +37,7 @@ public class AnnouncementPostDatas{
         try {
             postData.put("title",title);
             postData.put("content",content);
-            postData.put("course",Session.selectedID);
+            postData.put("course",Session.selectedCourse.courseid);
         } catch (JSONException e) {
             e.printStackTrace();
         }

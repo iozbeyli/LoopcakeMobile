@@ -39,11 +39,20 @@ public class CourseDetailFragment extends LCFragment implements Communicator{
     @Override
     public void successfulExecute(JSONObject jsonObject) {
         try {
-            JSONArray details = jsonObject.getJSONArray("details");
-            JSONObject course = details.getJSONObject(0);
+            String details = "";
+            String langs = "";
+            JSONArray array = jsonObject.getJSONArray("details");
+            JSONObject course = array.getJSONObject(0);
             String courseName = course.getString("name");
             String code = course.getString("code");
             String instructor = course.getString("instructor");
+            if(!course.isNull("details"))               details = course.getString("details");
+            if(!course.isNull("programmingLanguages"))  langs = course.getString("programmingLanguages");
+            Session.selectedCourse.code = code;
+            Session.selectedCourse.instructor = instructor;
+            Session.selectedCourse.details = details;
+            Session.selectedCourse.langs = langs;
+
             TextView courseNameView = (TextView)layout.findViewById(R.id.courseDetailTitle);
             courseNameView.setText(courseName);
             TextView codeView = (TextView)layout.findViewById(R.id.courseDetailCode);
