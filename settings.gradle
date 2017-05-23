@@ -1,1 +1,3 @@
 include ':app'
+include ':slideDateTimePicker'
+project(':slideDateTimePicker').projectDir = new File(settingsDir, '/slideDateTimePicker')

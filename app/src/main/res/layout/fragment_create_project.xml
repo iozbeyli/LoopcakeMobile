@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+    <TextView
+        android:id="@+id/label_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Name" />
+
+    <EditText
+        android:id="@+id/edit_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="text|textNoSuggestions" />
+
+    <TextView
+        android:id="@+id/label_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Detail" />
+
+    <EditText
+        android:id="@+id/edit_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.09"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:hint="Detail"/>
+
+        <TextView
+            android:id="@+id/label_groupSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Max Group Size" />
+
+        <EditText
+            android:id="@+id/edit_group_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberSigned" />
+
+        <TextView
+            android:id="@+id/label_deadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Deadline" />
+
+        <Button
+            android:id="@+id/picker_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Deadline" />
+
+        <Button
+        android:id="@+id/create_announcement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send" />
+
+</LinearLayout>
