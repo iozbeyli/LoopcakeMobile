@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
@@ -36,6 +37,7 @@ public abstract class LCExpandableFragment<T> extends Fragment implements LCExpa
     protected View progressBar;
     protected View expandableList;
     protected ArrayList<T> items;
+    private ScrollView scrollView;
 
     public LCExpandableFragment() {
         // Required empty public constructor
@@ -71,6 +73,7 @@ public abstract class LCExpandableFragment<T> extends Fragment implements LCExpa
     public abstract void fillList();
 
     public void displayList(int groupLayout,int childLayout){
+
         expandableListView = (ExpandableListView) expandableList;
         LCExpandableAdapter expAdt = new LCExpandableAdapter(getActivity(),this,items,groupLayout,childLayout);
         expandableListView.setAdapter(expAdt);

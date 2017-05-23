@@ -14,9 +14,10 @@ import java.util.ArrayList;
  */
 
 public class LCFile {
-    String name;
-    ArrayList<LCFile> children;
-    Enumerators.FileType fileType;
+    public String name;
+    public ArrayList<LCFile> children;
+    public Enumerators.FileType fileType;
+    public boolean listed=false;
     private LCFile(String name){
         this.name=name;
     }

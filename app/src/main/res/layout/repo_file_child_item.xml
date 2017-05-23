@@ -10,6 +10,5 @@
     <ExpandableListView
         android:id="@+id/repo_file_child_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"></ExpandableListView>
+        android:layout_height="wrap_content"></ExpandableListView>
 </LinearLayout>

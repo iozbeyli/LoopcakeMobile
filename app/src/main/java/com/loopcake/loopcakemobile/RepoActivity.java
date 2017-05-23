@@ -7,11 +7,9 @@ import android.view.View;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
-import com.loopcake.loopcakemobile.PostDatas.GroupPostDatas;
 import com.loopcake.loopcakemobile.PostDatas.RepoPostDatas;
 import com.loopcake.loopcakemobile.RepoFragments.RepoBranchTreeFragment;
 import com.loopcake.loopcakemobile.RepoFragments.RepoDetailsFragment;
-import com.loopcake.loopcakemobile.RepoFragments.RepoFilesFragment;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
 
 import org.json.JSONArray;
