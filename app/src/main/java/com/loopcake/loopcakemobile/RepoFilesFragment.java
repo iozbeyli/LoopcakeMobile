@@ -68,7 +68,7 @@ public class RepoFilesFragment extends LCListFragment<LCFile> implements Communi
     }
 
     @Override
-    public void listItemPressed(LCFile listItem) {
+    public void listItemPressed(LCFile listItem, View itemView) {
 
     }
 

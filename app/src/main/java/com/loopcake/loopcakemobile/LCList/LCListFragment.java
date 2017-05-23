@@ -51,7 +51,7 @@ public abstract class LCListFragment<T> extends Fragment implements LCListCarrie
     }
 
     @Override
-    public abstract void listItemPressed(T listItem);
+    public abstract void listItemPressed(T listItem,View itemView);
 
     @Override
     public abstract void setItemContent(T item, View itemView);

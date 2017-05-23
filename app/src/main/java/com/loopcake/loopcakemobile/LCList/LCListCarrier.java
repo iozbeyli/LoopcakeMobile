@@ -7,6 +7,6 @@ import android.view.View;
  */
 
 public interface LCListCarrier<T> {
-    void listItemPressed(T listItem);
+    void listItemPressed(T listItem,View itemView);
     void setItemContent(T item,View itemView);
 }

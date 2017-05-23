@@ -61,7 +61,7 @@ public class CourseStudentFragment extends LCListFragment<User> implements Commu
     }
 
     @Override
-    public void listItemPressed(User listItem) {
+    public void listItemPressed(User listItem, View itemView) {
 
     }
 

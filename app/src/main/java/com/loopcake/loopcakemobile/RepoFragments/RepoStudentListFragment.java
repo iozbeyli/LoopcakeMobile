@@ -31,7 +31,7 @@ public class RepoStudentListFragment extends LCListFragment<User> implements Com
     }
 
     @Override
-    public void listItemPressed(User listItem) {
+    public void listItemPressed(User listItem, View itemView) {
 
     }
 

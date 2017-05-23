@@ -42,7 +42,7 @@ public class LCRecyclerViewAdapter<T> extends RecyclerView.Adapter<LCRecyclerVie
                 if (null != listener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    listener.listItemPressed(holder.item);
+                    listener.listItemPressed(holder.item,holder.view);
                 }
             }
         });

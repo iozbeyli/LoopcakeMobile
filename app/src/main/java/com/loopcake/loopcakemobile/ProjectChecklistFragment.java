@@ -38,9 +38,8 @@ public class ProjectChecklistFragment extends LCListFragment<ChecklistItem>{
         displayList(items,R.layout.fragment_project_checklist);
     }
 
-
     @Override
-    public void listItemPressed(ChecklistItem listItem) {
+    public void listItemPressed(ChecklistItem listItem, View itemView) {
 
     }
 

@@ -30,7 +30,7 @@ public class RepoListFragment extends LCListFragment<Repo> implements Communicat
     }
 
     @Override
-    public void listItemPressed(Repo listItem) {
+    public void listItemPressed(Repo listItem, View itemView) {
         Session.selectedRepo=listItem;
         Intent intent = new Intent(getActivity(),RepoActivity.class);
         startActivity(intent);

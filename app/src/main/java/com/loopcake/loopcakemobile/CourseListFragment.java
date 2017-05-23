@@ -29,7 +29,7 @@ public class CourseListFragment extends LCListFragment<Course> implements Commun
     }
 
     @Override
-    public void listItemPressed(Course listItem) {
+    public void listItemPressed(Course listItem, View itemView) {
         Log.d("item","clicked");
         Session.selectedID = listItem.courseid;
         Session.selectedCourse=listItem;
