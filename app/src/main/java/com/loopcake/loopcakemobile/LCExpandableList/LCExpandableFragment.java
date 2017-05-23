@@ -94,8 +94,7 @@ public abstract class LCExpandableFragment<T> extends Fragment implements LCExpa
     @Override
     public abstract void setGroupView(View groupView, T item);
 
-    @Override
-    public abstract void setChildView(View childView, T item);
+    public abstract void setChildView(View childView, T item, int childPosition);
 
     public abstract void onGroupClicked(T item);
 

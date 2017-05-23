@@ -1,5 +1,7 @@
 package com.loopcake.loopcakemobile.PostDatas;
 
+import com.loopcake.loopcakemobile.Session;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +34,16 @@ public class RepoPostDatas{
         try {
             reqData.put("operation","2");
             reqData.put("users",members);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  reqData;
+    }
+    public static JSONObject getRepoFileListPostData(String repoID,String userID){
+        JSONObject reqData = new JSONObject();
+        try {
+            reqData.put("repo", repoID);
+            reqData.put("user", userID);
         } catch (JSONException e) {
             e.printStackTrace();
         }

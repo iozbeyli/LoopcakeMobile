@@ -50,19 +50,25 @@ public class LCExpandableAdapter<T> extends BaseExpandableListAdapter {
         if (convertView == null) {
                 convertView = inflater.inflate(childLayout, null);
         }
-        carrier.setChildView(convertView,items.get(groupPosition));
+        carrier.setChildView(convertView,items.get(groupPosition),childPosition);
         return convertView;
 
     }
 
     @Override
     public int getGroupCount() {
-        return items.size();
+        if(items==null){
+            return 0;
+        }else{
+            return items.size();
+        }
+
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 1;
+        int count = carrier.getChildrenCount(items.get(groupPosition));
+        return count;
     }
 
     @Override

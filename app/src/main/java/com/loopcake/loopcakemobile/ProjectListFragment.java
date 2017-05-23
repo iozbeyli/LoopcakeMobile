@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.LCExpandableList.Announcement;
 import com.loopcake.loopcakemobile.LCExpandableList.LCExpandableFragment;
 import com.loopcake.loopcakemobile.LCExpandableList.Project;
 import com.loopcake.loopcakemobile.PostDatas.PostDatas;
@@ -46,7 +47,7 @@ public class ProjectListFragment extends LCExpandableFragment<Project> implement
     }
 
     @Override
-    public void setChildView(View childView, Project item) {
+    public void setChildView(View childView, Project item, int childPosition) {
         ProgressBar progressBar = (ProgressBar)childView.findViewById(R.id.project_progress_bar);
         TextView projectDetail = (TextView)childView.findViewById(R.id.project_content);
         progressBar.setProgress(item.getPoints());
@@ -56,6 +57,11 @@ public class ProjectListFragment extends LCExpandableFragment<Project> implement
     @Override
     public void onGroupClicked(Project item) {
 
+    }
+
+    @Override
+    public int getChildrenCount(Project item) {
+        return 1;
     }
 
     @Override

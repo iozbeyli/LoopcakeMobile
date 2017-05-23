@@ -46,7 +46,7 @@ public class AnnouncementFragment extends LCExpandableFragment<Announcement> imp
     }
 
     @Override
-    public void setChildView(View childView, Announcement item) {
+    public void setChildView(View childView, Announcement item, int childPosition) {
         TextView content = (TextView) childView.findViewById(R.id.announcementContent);
         content.setText(item.details);
     }
@@ -59,6 +59,11 @@ public class AnnouncementFragment extends LCExpandableFragment<Announcement> imp
     @Override
     public void onGroupClicked(Announcement item) {
 
+    }
+
+    @Override
+    public int getChildrenCount(Announcement item) {
+        return 1;
     }
 
     @Override

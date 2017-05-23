@@ -49,13 +49,15 @@ public class MainActivity extends LCDrawerActivity implements NavigationView.OnN
         try {
             userDetailArray = jsonObject.getJSONArray("details");
             JSONObject userDetails = userDetailArray.getJSONObject(0);
+            Log.d("User",userDetails.toString());
             String email = (String)userDetails.get("email");
             String name = (String)userDetails.get("name");
             String surname = (String)userDetails.get("surname");
             String type = (String)userDetails.get("type");
             String universityID = (String)userDetails.get("universityID");
             String photoID = (String)userDetails.get("photo");
-            User user = new User(name,surname,email,type,photoID,universityID);
+            String id = (String)userDetails.get("_id");
+            User user = new User(id,name,surname,email,type,photoID,universityID);
             Session.user=user;
             setDrawerUserInfo();
             GetUserImage userImage = new GetUserImage(photoID);

@@ -37,7 +37,7 @@ public class CourseStudentFragment extends LCListFragment<User> implements Commu
                 User studentObject = new User();
                 studentObject.name=name;
                 studentObject.surname=surname;
-                studentObject.id = id;
+                studentObject.userID = id;
                 Log.d("name",name+" "+surname);
                 Log.d("id",id);
                 students.add(studentObject);

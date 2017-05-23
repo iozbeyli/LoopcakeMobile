@@ -1,5 +1,6 @@
 package com.loopcake.loopcakemobile.LCList.LCListItems;
 
+import com.loopcake.loopcakemobile.RepoFragments.LCFile;
 import com.loopcake.loopcakemobile.User;
 
 import org.json.JSONArray;
@@ -20,13 +21,14 @@ public class Repo {
     public JSONArray collaborators;
     public JSONArray membersJSONArray;
     public ArrayList<User> members;
-
+    public ArrayList<LCFile> files;
 
     public Repo(String position, String repoName, String repoID) {
         this.position = position;
         this.repoName = repoName;
         this.repoID = repoID;
     }
+
 
     @Override
     public String toString() {

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 
 public class User {
-    public String id;
+    public String userID;
     public String name;
     public String surname;
     public String email;
@@ -27,13 +27,14 @@ public class User {
 
     public ArrayList<Repo> repos;
 
-    public User(String name,String surname,String email,String type,String photoID,String universityID){
+    public User(String userID,String name,String surname,String email,String type,String photoID,String universityID){
         this.name=name;
         this.surname=surname;
         this.email=email;
         this.type=type;
         this.photoID=photoID;
         this.universityID=universityID;
+        this.userID=userID;
     }
     public User(){
 
