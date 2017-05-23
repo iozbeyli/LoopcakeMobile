@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
 import com.loopcake.loopcakemobile.PostDatas.GroupPostDatas;
 import com.loopcake.loopcakemobile.PostDatas.RepoPostDatas;
 import com.loopcake.loopcakemobile.RepoFragments.RepoBranchTreeFragment;
@@ -13,6 +14,8 @@ import com.loopcake.loopcakemobile.RepoFragments.RepoDetailsFragment;
 import com.loopcake.loopcakemobile.RepoFragments.RepoFilesFragment;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -58,6 +61,21 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
     @Override
     public void successfulExecute(JSONObject jsonObject) {
         Log.d("repo response",jsonObject.toString());
+        try {
+            JSONArray repoDetailArray = jsonObject.getJSONArray("details");
+            JSONObject repoDetails = repoDetailArray.getJSONObject(0);
+            Repo temp = Session.selectedRepo;
+            temp.isRepoPersonal=repoDetails.getBoolean("isRepoPersonal");
+            temp.tags = repoDetails.getJSONArray("tags");
+            temp.branchPointers=repoDetails.getJSONArray("branchPointers");
+            temp.collaborators = repoDetails.getJSONArray("collaborators");
+            JSONArray members = repoDetails.getJSONArray("members");
+            temp.membersJSONArray=members;
+            Session.selectedRepo=temp;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         setTabView();
     }
 

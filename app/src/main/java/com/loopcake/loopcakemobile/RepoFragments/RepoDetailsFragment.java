@@ -1,5 +1,9 @@
 package com.loopcake.loopcakemobile.RepoFragments;
 
+
+import android.support.v4.app.FragmentTransaction;
+import android.widget.FrameLayout;
+
 import com.loopcake.loopcakemobile.LCFragment.LCFragment;
 import com.loopcake.loopcakemobile.R;
 
@@ -15,6 +19,12 @@ public class RepoDetailsFragment extends LCFragment {
 
     @Override
     public void mainFunction() {
-
+        RepoStudentListFragment fragment = new RepoStudentListFragment();
+        FragmentTransaction ft =getChildFragmentManager().beginTransaction();
+        ft.replace(R.id.repo_students_frame, fragment, "visible_fragment");
+        ft.addToBackStack(null);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
     }
+
 }
