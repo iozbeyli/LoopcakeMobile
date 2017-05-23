@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\res\\merged\\debug\\layout\\custom_tab.xml",
+        "source": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\layout\\custom_tab.xml"
+    },
+    {
+        "merged": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_date.xml",
+        "source": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\layout\\fragment_date.xml"
+    },
+    {
+        "merged": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\res\\merged\\debug\\layout\\slide_date_time_picker.xml",
+        "source": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\layout\\slide_date_time_picker.xml"
+    },
+    {
+        "merged": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\res\\merged\\debug\\layout\\fragment_time.xml",
+        "source": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\layout\\fragment_time.xml"
+    }
+]
