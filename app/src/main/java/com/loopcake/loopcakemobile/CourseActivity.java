@@ -9,7 +9,9 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
@@ -32,6 +34,8 @@ import static com.loopcake.loopcakemobile.Enumerators.Enumerators.CourseActions.
 
 public class CourseActivity extends LCTabbedActivity {
 
+    private static final String TAG = "CourseActivity";
+
     @Override
     public void onCreateFunction() {
 
@@ -51,6 +55,7 @@ public class CourseActivity extends LCTabbedActivity {
         pageTitles.add("Details");
         pageTitles.add("Announce");
         pageTitles.add("Students");
+        Log.d(TAG, "primary: "+Constants.colorPrimary);
         return new SectionsPagerAdapter(getSupportFragmentManager(),fragments,pageTitles);
     }
 
@@ -89,12 +94,11 @@ public class CourseActivity extends LCTabbedActivity {
 
                     builder.setCustomTitle(title);
                     final EditText input = new EditText(CourseActivity.this);
-                    input.setPadding(0,50,0,50);
                     input.setHint("Seperate with , for multiple students");
                     builder.setView(input);
                     builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        public void onClick(final DialogInterface dialog, int which) {
                             JSONObject post = new JSONObject();
                             try {
                                 post.put("students",input.getText().toString());
@@ -103,10 +107,17 @@ public class CourseActivity extends LCTabbedActivity {
                                     AsyncCommunicationTask task = new AsyncCommunicationTask(Constants.apiURL + "/addStudents",
                                             post, new Communicator() {
                                         @Override
-                                        public void successfulExecute(JSONObject jsonObject) { }
+                                        public void successfulExecute(JSONObject jsonObject) {
+                                            Log.d(TAG, "successfulExecute: "+ jsonObject);
+                                            dialog.cancel();
+                                        }
                                         @Override
-                                        public void failedExecute() {}
+                                        public void failedExecute() {
+
+                                            Log.wtf(TAG, "failedExecution");
+                                        }
                                     });
+                                    task.execute((Void) null);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
