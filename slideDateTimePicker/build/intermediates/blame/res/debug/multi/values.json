@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+        "outputFile": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
         "map": [
             {
                 "to": {
@@ -11,7 +11,7 @@
                     "endOffset": 112
                 },
                 "from": {
-                    "file": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values\\colors.xml",
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/src/main/res/values/colors.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -30,7 +30,7 @@
                     "endOffset": 175
                 },
                 "from": {
-                    "file": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values\\colors.xml",
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/src/main/res/values/colors.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -50,7 +50,7 @@
                     "endOffset": 466
                 },
                 "from": {
-                    "file": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values\\styles.xml",
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/src/main/res/values/styles.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -71,7 +71,92 @@
                     "endOffset": 626
                 },
                 "from": {
-                    "file": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values\\styles.xml",
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/src/main/res/values/styles.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 510,
+                        "endLine": 17,
+                        "endColumn": 12,
+                        "endOffset": 665
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 61,
+                    "endOffset": 112
+                },
+                "from": {
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values\\colors.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 57,
+                        "endColumn": 61,
+                        "endOffset": 114
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 117,
+                    "endColumn": 62,
+                    "endOffset": 175
+                },
+                "from": {
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values\\colors.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 119,
+                        "endColumn": 62,
+                        "endOffset": 177
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 180,
+                    "endLine": 10,
+                    "endColumn": 12,
+                    "endOffset": 466
+                },
+                "from": {
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values\\styles.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 186,
+                        "endLine": 12,
+                        "endColumn": 12,
+                        "endOffset": 472
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 471,
+                    "endLine": 13,
+                    "endColumn": 12,
+                    "endOffset": 626
+                },
+                "from": {
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values\\styles.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,

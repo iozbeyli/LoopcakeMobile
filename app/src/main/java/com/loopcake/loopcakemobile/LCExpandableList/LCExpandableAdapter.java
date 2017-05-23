@@ -3,6 +3,7 @@ package com.loopcake.loopcakemobile.LCExpandableList;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class LCExpandableAdapter<T> extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         int count = carrier.getChildrenCount(items.get(groupPosition));
+        Log.d(items.get(groupPosition).toString(),""+count);
         return count;
     }
 
