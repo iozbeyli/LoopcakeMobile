@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
+        "outputFile": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
         "map": [
             {
                 "to": {
@@ -12,7 +12,7 @@
                     "endOffset": 187
                 },
                 "from": {
-                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values-v11\\styles.xml",
+                    "file": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values-v11\\styles.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -26,7 +26,7 @@
         ]
     },
     {
-        "outputFile": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v11/values-v11.xml",
+        "outputFile": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
         "map": [
             {
                 "to": {
@@ -38,7 +38,33 @@
                     "endOffset": 187
                 },
                 "from": {
-                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/src/main/res/values-v11/styles.xml",
+                    "file": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values-v11\\styles.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 183,
+                        "endLine": 8,
+                        "endColumn": 12,
+                        "endOffset": 317
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endLine": 4,
+                    "endColumn": 12,
+                    "endOffset": 187
+                },
+                "from": {
+                    "file": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values-v11\\styles.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,

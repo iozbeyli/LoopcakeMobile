@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v14\\values-v14.xml",
+        "outputFile": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v14\\values-v14.xml",
         "map": [
             {
                 "to": {
@@ -12,7 +12,7 @@
                     "endOffset": 201
                 },
                 "from": {
-                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\bundles\\debug\\res\\values-v14\\values-v14.xml",
+                    "file": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\bundles\\debug\\res\\values-v14\\values-v14.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -26,7 +26,7 @@
         ]
     },
     {
-        "outputFile": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-v14/values-v14.xml",
+        "outputFile": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v14\\values-v14.xml",
         "map": [
             {
                 "to": {
@@ -38,7 +38,33 @@
                     "endOffset": 201
                 },
                 "from": {
-                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/build/intermediates/bundles/debug/res/values-v14/values-v14.xml",
+                    "file": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\bundles\\debug\\res\\values-v14\\values-v14.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endLine": 4,
+                        "endColumn": 12,
+                        "endOffset": 201
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v14\\values-v14.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endLine": 4,
+                    "endColumn": 12,
+                    "endOffset": 201
+                },
+                "from": {
+                    "file": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\bundles\\debug\\res\\values-v14\\values-v14.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
