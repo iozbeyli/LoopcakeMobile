@@ -1,6 +1,10 @@
 [
     {
+<<<<<<< Updated upstream
         "outputFile": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v14\\values-v14.xml",
+=======
+        "outputFile": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-v14/values-v14.xml",
+>>>>>>> Stashed changes
         "map": [
             {
                 "to": {
@@ -12,7 +16,11 @@
                     "endOffset": 201
                 },
                 "from": {
+<<<<<<< Updated upstream
                     "file": "C:\\Users\\Melih\\Desktop\\Loopcake\\Development\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values-v14\\styles.xml",
+=======
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/slideDateTimePicker/src/main/res/values-v14/styles.xml",
+>>>>>>> Stashed changes
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -26,7 +34,11 @@
         ]
     },
     {
+<<<<<<< Updated upstream
         "outputFile": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v14\\values-v14.xml",
+=======
+        "outputFile": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values-v14\\values-v14.xml",
+>>>>>>> Stashed changes
         "map": [
             {
                 "to": {
@@ -38,14 +50,18 @@
                     "endOffset": 201
                 },
                 "from": {
+<<<<<<< Updated upstream
                     "file": "C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values-v14\\styles.xml",
+=======
+                    "file": "/Users/Melih/Desktop/Loopcake/Development/LoopcakeMobile/C:\\Users\\MEHMET\\Documents\\GitHub\\LoopcakeMobile\\slideDateTimePicker\\src\\main\\res\\values-v14\\styles.xml",
+>>>>>>> Stashed changes
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
-                        "startOffset": 227,
+                        "startOffset": 220,
                         "endLine": 9,
                         "endColumn": 12,
-                        "endOffset": 375
+                        "endOffset": 366
                     }
                 }
             }
