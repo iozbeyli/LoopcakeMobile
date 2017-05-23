@@ -34,8 +34,8 @@ public class SubFabController {
             subFabLayouts.get(i).setVisibility(View.VISIBLE);
         }
         subFabsView.setVisibility(View.GONE);
-        fabsOpen=false;
     }
+
 
     public void openSubFabs(){
         for(int i=0;i<floatingActionButtons.size();i++){
@@ -46,6 +46,7 @@ public class SubFabController {
 
     public void setSubFabs(int fragmentIndex){
         closeSubFabs();
+        fabsOpen=false;
 
         ArrayList<String> texts= textListForFragments.get(fragmentIndex);
         ArrayList<View.OnClickListener> listeners = listenerListForFragments.get(fragmentIndex);

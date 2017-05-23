@@ -38,7 +38,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".SubCourseActivity"
+        <activity
+            android:name=".SubCourseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -46,11 +47,11 @@
                 android:value=".CourseActivity" />
         </activity>
         <activity
-        android:name=".ProjectActivity"
-        android:label="@string/title_activity_project"
-        android:parentActivityName=".MainActivity"
-        android:screenOrientation="portrait"
-        android:theme="@style/AppTheme.NoActionBar">
+            android:name=".ProjectActivity"
+            android:label="@string/title_activity_project"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -64,7 +65,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
+        <activity android:name=".SubRepoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RepoActivity" />
+        </activity>
     </application>
 
 </manifest>

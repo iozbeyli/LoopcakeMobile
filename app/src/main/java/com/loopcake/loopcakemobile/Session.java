@@ -2,6 +2,7 @@ package com.loopcake.loopcakemobile;
 
 import com.loopcake.loopcakemobile.LCList.LCListItems.Course;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
+import com.loopcake.loopcakemobile.RepoFragments.LCFile;
 
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ public class Session {
    public static JSONObject selectedProject;
    public static Course selectedCourse;
    public static Repo selectedRepo;
+   public static LCFile selectedFile;
 }
 
 

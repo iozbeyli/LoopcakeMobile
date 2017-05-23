@@ -49,5 +49,16 @@ public class RepoPostDatas{
         }
         return  reqData;
     }
+    public static JSONObject getRepoFileContentPostData(String repoID,String userID,String path){
+        JSONObject reqData = new JSONObject();
+        try {
+            reqData.put("repo", repoID);
+            reqData.put("user", userID);
+            reqData.put("path", path);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  reqData;
+    }
 
 }

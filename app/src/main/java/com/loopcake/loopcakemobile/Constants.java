@@ -20,4 +20,5 @@ public class Constants {
     public final static String getAnnounceURL = apiURL+"getAnnounce";
 
     public final static String getFileListURL = gitAPIURL+"list";
+    public final static String getFileContentURL = gitAPIURL+"getFileContent";
 }

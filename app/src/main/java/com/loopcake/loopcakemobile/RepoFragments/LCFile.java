@@ -18,6 +18,8 @@ public class LCFile {
     public ArrayList<LCFile> children;
     public Enumerators.FileType fileType;
     public boolean listed=false;
+    public String path;
+    public String code;
     private LCFile(String name){
         this.name=name;
     }
@@ -26,7 +28,7 @@ public class LCFile {
         children=new ArrayList<>();
         for(int i = 0;i<childrenJSONArray.length();i++){
             try {
-                LCFile child = LCFile.newLCFile(childrenJSONArray.getJSONObject(i));
+                LCFile child = LCFile.newLCFile(childrenJSONArray.getJSONObject(i),this);
                 if(child!=null){
                     children.add(child);
                 }
@@ -36,10 +38,16 @@ public class LCFile {
         }
     }
 
-    public static LCFile newLCFile(JSONObject fileJSONObject){
+    public static LCFile newLCFile(JSONObject fileJSONObject,LCFile parent){
         try {
+
             String name = fileJSONObject.getString("name");
             LCFile tempLCFile = new LCFile(name);
+            if(parent!=null){
+                tempLCFile.path=parent.path+"/"+name;
+            }else{
+                tempLCFile.path=name;
+            }
             JSONArray children = fileJSONObject.getJSONArray("children");
             if(children.length()==0){
                 tempLCFile.fileType= Enumerators.FileType.FILE;

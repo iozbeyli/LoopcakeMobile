@@ -28,6 +28,7 @@ import com.loopcake.loopcakemobile.R;
 import com.loopcake.loopcakemobile.RepoFragments.RepoCodeFragment;
 import com.loopcake.loopcakemobile.RepoListFragment;
 import com.loopcake.loopcakemobile.Session;
+import com.loopcake.loopcakemobile.SubRepoActivity;
 import com.loopcake.loopcakemobile.TwoFactorAuthentication.TwoFactorAuthenticationFragment;
 
 import java.util.ArrayList;
@@ -90,6 +91,12 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
             navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
             headerView=navigationView.getHeaderView(0);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment fragment = new AnnouncementFragment();
+            ft.replace(R.id.frame_main, fragment, "visible_fragment");
+            ft.addToBackStack(null);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
             closeSubFabs();
             onCreateFunction();
         }
