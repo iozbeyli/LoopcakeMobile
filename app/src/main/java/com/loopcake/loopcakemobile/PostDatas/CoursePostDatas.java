@@ -36,7 +36,7 @@ public class CoursePostDatas {
             reqData.put("name",course.name);
             reqData.put("code",course.code);
             reqData.put("details",course.details);
-            reqData.put("langs",course.langs);
+            reqData.put("programmingLanguage",course.langs);
             reqData.put("courseid",course.courseid);
         } catch (JSONException e) {
             e.printStackTrace();

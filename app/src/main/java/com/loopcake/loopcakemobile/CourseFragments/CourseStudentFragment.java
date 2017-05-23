@@ -30,7 +30,7 @@ public class CourseStudentFragment extends LCListFragment<User> implements Commu
         try {
             JSONArray details = jsonObject.getJSONArray("details");
             for(int i=0;i<details.length();i++){
-                JSONObject student = details.getJSONObject(0);
+                JSONObject student = details.getJSONObject(i);
                 String name = student.getString("name");
                 String surname = student.getString("surname");
                 String id = student.getString("_id");
