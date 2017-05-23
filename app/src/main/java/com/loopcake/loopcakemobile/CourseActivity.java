@@ -16,20 +16,8 @@ public class CourseActivity extends LCTabbedActivity {
 
     @Override
     public void onCreateFunction() {
-        ArrayList<String> fabTexts = new ArrayList<>();
-        fabTexts.add("Create Announcement");
-        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
-        listeners.add(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateAnnouncementFragment caf = new CreateAnnouncementFragment();
-                Intent in = new Intent(CourseActivity.this, SubCourseActivity.class);
-                in.putExtra("fragment", Enumerators.CourseActions.CREATE_ANNOUNCEMENT);
-                in.putExtra("courseName", Session.selectedCourse.title);
-                startActivity(in);
-            }
-        });
-        setSubFabs(fabTexts,listeners);
+
+
     }
 
     @Override
@@ -46,6 +34,38 @@ public class CourseActivity extends LCTabbedActivity {
         pageTitles.add("Announce");
         pageTitles.add("Students");
         return new SectionsPagerAdapter(getSupportFragmentManager(),fragments,pageTitles);
+    }
+
+    @Override
+    public ArrayList<ArrayList<String>> setTextListsForFragments() {
+        ArrayList<ArrayList<String>> fragmentTextLists=new ArrayList<>();
+        ArrayList<String> fabTexts = new ArrayList<>();
+        fabTexts.add("Create Announcement");
+        fragmentTextLists.add(fabTexts);
+        fragmentTextLists.add(fabTexts);
+        fragmentTextLists.add(fabTexts);
+        return fragmentTextLists;
+
+    }
+
+    @Override
+    public ArrayList<ArrayList<View.OnClickListener>> setListenerListsForFragments() {
+        ArrayList<ArrayList<View.OnClickListener>> fragmentListenerLists = new ArrayList<>();
+        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
+        listeners.add(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateAnnouncementFragment caf = new CreateAnnouncementFragment();
+                Intent in = new Intent(CourseActivity.this, SubCourseActivity.class);
+                in.putExtra("fragment", Enumerators.CourseActions.CREATE_ANNOUNCEMENT);
+                in.putExtra("courseName", Session.selectedCourse.title);
+                startActivity(in);
+            }
+        });
+        fragmentListenerLists.add(listeners);
+        fragmentListenerLists.add(listeners);
+        fragmentListenerLists.add(listeners);
+        return fragmentListenerLists;
     }
 
 }

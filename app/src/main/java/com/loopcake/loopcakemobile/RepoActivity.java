@@ -27,16 +27,6 @@ import java.util.ArrayList;
 public class RepoActivity extends LCTabbedActivity implements Communicator{
     @Override
     public void onCreateFunction() {
-        ArrayList<String> fabTexts = new ArrayList<>();
-        fabTexts.add("Upload File");
-        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
-        listeners.add(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("faa","a");
-            }
-        });
-        setSubFabs(fabTexts,listeners);
         AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, RepoPostDatas.getRepoDetailsPostData(Session.selectedRepo.repoID),this);
         asyncCommunicationTask.execute((Void) null);
     }
@@ -56,6 +46,33 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
         pageTitles.add("Files");
         pageTitles.add("Branch Tree");
         return new SectionsPagerAdapter(getSupportFragmentManager(),fragments,pageTitles);
+    }
+
+    @Override
+    public ArrayList<ArrayList<String>> setTextListsForFragments() {
+        ArrayList<ArrayList<String>> fragmentTextLists=new ArrayList<>();
+        ArrayList<String> fabTexts = new ArrayList<>();
+        fabTexts.add("Naber");
+        fragmentTextLists.add(fabTexts);
+        fragmentTextLists.add(fabTexts);
+        fragmentTextLists.add(fabTexts);
+        return fragmentTextLists;
+    }
+
+    @Override
+    public ArrayList<ArrayList<View.OnClickListener>> setListenerListsForFragments() {
+        ArrayList<ArrayList<View.OnClickListener>> fragmentListenerLists = new ArrayList<>();
+        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
+        listeners.add(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("faa","a");
+            }
+        });
+        fragmentListenerLists.add(listeners);
+        fragmentListenerLists.add(listeners);
+        fragmentListenerLists.add(listeners);
+        return fragmentListenerLists;
     }
 
     @Override

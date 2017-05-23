@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
@@ -18,6 +19,7 @@ import com.loopcake.loopcakemobile.CourseFragments.CourseDetailFragment;
 import com.loopcake.loopcakemobile.CourseFragments.CourseStudentFragment;
 import com.loopcake.loopcakemobile.Enumerators.Enumerators;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
+import com.loopcake.loopcakemobile.TabbedActivities.SubFabController;
 
 import java.util.ArrayList;
 
@@ -28,18 +30,20 @@ public abstract class LCTabbedActivity extends AppCompatActivity{
 
     private ViewPager mViewPager;
     protected FloatingActionButton fabMain;
-    private FloatingActionButton[] subFabs;
-    private TextView[] subFabTexts;
-    private View[] subFabLayouts;
+    private ArrayList<FloatingActionButton> subFabs;
+    private ArrayList<TextView> subFabTexts;
+    private ArrayList<View> subFabLayouts;
     private int numberOfFabs=0;
+    private View subFabsView;
     private boolean fabsOpen=false;
-
+    protected int selectedTab;
+    protected SubFabController subFabController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        subFabs = new FloatingActionButton[3];
-        subFabTexts = new TextView[3];
-        subFabLayouts = new View[3];
+        subFabs = new ArrayList<FloatingActionButton>();
+        subFabTexts = new ArrayList<>();
+        subFabLayouts = new ArrayList<>();
         setContentView(R.layout.activity_tabbed);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -54,15 +58,21 @@ public abstract class LCTabbedActivity extends AppCompatActivity{
             }
         });
 
-        subFabs[0] = (FloatingActionButton) findViewById(R.id.fabSub1);
-        subFabs[1] = (FloatingActionButton) findViewById(R.id.fabSub2);
-        subFabs[2] = (FloatingActionButton) findViewById(R.id.fabSub3);
-        subFabTexts[0] = (TextView) findViewById(R.id.fabSub1Text);
-        subFabTexts[1] = (TextView) findViewById(R.id.fabSub2Text);
-        subFabTexts[2] = (TextView) findViewById(R.id.fabSub3Text);
-        subFabLayouts[0] =  findViewById(R.id.fabSub1Layout);
-        subFabLayouts[1] =  findViewById(R.id.fabSub2Layout);
-        subFabLayouts[2] =  findViewById(R.id.fabSub3Layout);
+        subFabs.add ((FloatingActionButton) findViewById(R.id.fabSub1));
+        subFabs.add ((FloatingActionButton) findViewById(R.id.fabSub2));
+        subFabs.add((FloatingActionButton) findViewById(R.id.fabSub3));
+        subFabTexts.add((TextView) findViewById(R.id.fabSub1Text));
+        subFabTexts.add((TextView) findViewById(R.id.fabSub2Text));
+        subFabTexts.add((TextView) findViewById(R.id.fabSub3Text));
+        subFabLayouts.add(findViewById(R.id.fabSub1Layout));
+        subFabLayouts.add(findViewById(R.id.fabSub2Layout));
+        subFabLayouts.add(findViewById(R.id.fabSub3Layout));
+        subFabsView = findViewById(R.id.fabSubs);
+        subFabController = new SubFabController(subFabs,subFabTexts,subFabLayouts,subFabsView);
+        subFabController.setTextListForFragments(setTextListsForFragments());
+        subFabController.setListenerListForFragments(setListenerListsForFragments());
+        subFabController.setSubFabs(0);
+        setListenerListsForFragments();
         if(!(this instanceof Communicator)){
             setTabView();
         }
@@ -73,45 +83,29 @@ public abstract class LCTabbedActivity extends AppCompatActivity{
 
     public abstract void onCreateFunction();
 
-    private void closeSubFabs(){
-        for(int i=0;i<subFabs.length;i++){
-            subFabLayouts[i].setVisibility(View.VISIBLE);
-        }
-        View subFabsView = findViewById(R.id.fabSubs);
-        subFabsView.setVisibility(View.GONE);
+   /* private void closeSubFabs(){
+        subFabController.closeSubFabs();
     }
 
     private void openSubFabs(){
-        for(int i=0;i<subFabs.length;i++){
-            subFabLayouts[i].setVisibility(View.GONE);
-        }
-        View subFabsView = findViewById(R.id.fabSubs);
-        subFabsView.setVisibility(View.VISIBLE);
-    }
+        subFabController.openSubFabs();
+    }*/
 
-    public void setSubFabs(ArrayList<String> texts,ArrayList<View.OnClickListener> listeners){
+    /*public void setSubFabs(ArrayList<ArrayList<String>> texts,ArrayList<ArrayList<View.OnClickListener>> listeners){
         closeSubFabs();
         numberOfFabs=texts.size();
         for(int i = 0;i<texts.size();i++){
             subFabTexts[i].setText(texts.get(i));
             subFabs[i].setOnClickListener(listeners.get(i));
         }
-    }
+    }*/
 
-    private void openSub(int index){
+    /*private void openSub(int index){
         subFabLayouts[index].setVisibility(View.VISIBLE);
-    }
+    }*/
 
     private void clickMainFab(){
-        if(!fabsOpen){
-            openSubFabs();
-            for(int i=0;i<numberOfFabs;i++){
-                openSub(i);
-            }
-        }else{
-            closeSubFabs();
-        }
-        fabsOpen=!fabsOpen;
+        subFabController.openCloseFabs();
     }
 
 
@@ -148,6 +142,27 @@ public abstract class LCTabbedActivity extends AppCompatActivity{
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+            @Override
+            public void onTabSelected(TabLayout.Tab tab){
+                selectedTab = tab.getPosition();
+                subFabController.setSubFabs(selectedTab);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
+
+    public abstract ArrayList<ArrayList<String>> setTextListsForFragments();
+
+    public abstract ArrayList<ArrayList<View.OnClickListener>> setListenerListsForFragments();
 
 }

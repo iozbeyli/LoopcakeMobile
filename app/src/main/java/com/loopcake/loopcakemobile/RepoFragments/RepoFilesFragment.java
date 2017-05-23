@@ -1,5 +1,7 @@
 package com.loopcake.loopcakemobile.RepoFragments;
 
+import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
+import com.loopcake.loopcakemobile.Constants;
 import com.loopcake.loopcakemobile.LCFragment.LCFragment;
 import com.loopcake.loopcakemobile.R;
 
@@ -13,6 +15,6 @@ public class RepoFilesFragment extends LCFragment {
     }
     @Override
     public void mainFunction() {
-
+        //AsyncCommunicationTask repoFilesComm = new AsyncCommunicationTask(Constants.getFileListURL)
     }
 }

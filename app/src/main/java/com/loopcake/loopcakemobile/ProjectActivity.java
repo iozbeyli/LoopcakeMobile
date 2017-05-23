@@ -1,5 +1,6 @@
 package com.loopcake.loopcakemobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.Enumerators.Enumerators;
 import com.loopcake.loopcakemobile.PostDatas.GroupPostDatas;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
 
@@ -18,16 +20,9 @@ public class ProjectActivity extends LCTabbedActivity implements Communicator {
 
     @Override
     public void onCreateFunction() {
-        ArrayList<String> fabTexts = new ArrayList<>();
-        fabTexts.add("Naber");
-        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
-        listeners.add(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("faa","a");
-            }
-        });
-        setSubFabs(fabTexts,listeners);
+
+
+
         AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getGroupURL, GroupPostDatas.getGroupDetailsPostData(),this);
         asyncCommunicationTask.execute((Void) null);
     }
@@ -46,6 +41,35 @@ public class ProjectActivity extends LCTabbedActivity implements Communicator {
         pageTitles.add("Details");
         pageTitles.add("Submission");
         return new SectionsPagerAdapter(getSupportFragmentManager(),fragments,pageTitles);
+    }
+
+    @Override
+    public ArrayList<ArrayList<String>> setTextListsForFragments() {
+        ArrayList<ArrayList<String>> fragmentTextLists=new ArrayList<>();
+        ArrayList<String> fabTexts = new ArrayList<>();
+        fabTexts.add("Naber");
+        fragmentTextLists.add(fabTexts);
+        fabTexts = new ArrayList<>();
+        fabTexts.add("Nabe");
+        fragmentTextLists.add(fabTexts);
+        fragmentTextLists.add(fabTexts);
+        return fragmentTextLists;
+    }
+
+    @Override
+    public ArrayList<ArrayList<View.OnClickListener>> setListenerListsForFragments() {
+        ArrayList<ArrayList<View.OnClickListener>> fragmentListenerLists = new ArrayList<>();
+        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
+        listeners.add(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("faa","a");
+            }
+        });
+        fragmentListenerLists.add(listeners);
+        fragmentListenerLists.add(listeners);
+        fragmentListenerLists.add(listeners);
+        return fragmentListenerLists;
     }
 
     @Override
