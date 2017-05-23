@@ -8,9 +8,4 @@
         android:layout_height="wrap_content"
         android:paddingLeft="25dp"
         />
-    <ExpandableListView
-        android:id="@+id/repo_file_group_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></ExpandableListView>
 </LinearLayout>

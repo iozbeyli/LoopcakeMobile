@@ -16,7 +16,6 @@
         android:id="@+id/expandable_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
-        android:layout_weight="1"></ExpandableListView>
+        android:visibility="visible"></ExpandableListView>
 
 </LinearLayout>
