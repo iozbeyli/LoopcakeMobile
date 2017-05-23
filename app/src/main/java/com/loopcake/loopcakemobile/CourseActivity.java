@@ -40,9 +40,11 @@ public class CourseActivity extends LCTabbedActivity {
     public ArrayList<ArrayList<String>> setTextListsForFragments() {
         ArrayList<ArrayList<String>> fragmentTextLists=new ArrayList<>();
         ArrayList<String> fabTexts = new ArrayList<>();
-        fabTexts.add("Create Announcement");
+        fabTexts.add("Create Project");
+        ArrayList<String> fabTexts2 = new ArrayList<>();
+        fabTexts2.add("Create Announcement");
         fragmentTextLists.add(fabTexts);
-        fragmentTextLists.add(fabTexts);
+        fragmentTextLists.add(fabTexts2);
         fragmentTextLists.add(fabTexts);
         return fragmentTextLists;
 
@@ -57,13 +59,24 @@ public class CourseActivity extends LCTabbedActivity {
             public void onClick(View v) {
                 CreateAnnouncementFragment caf = new CreateAnnouncementFragment();
                 Intent in = new Intent(CourseActivity.this, SubCourseActivity.class);
+                in.putExtra("fragment", Enumerators.CourseActions.CREATE_PROJECT);
+                in.putExtra("courseName", Session.selectedCourse.title);
+                startActivity(in);
+            }
+        });
+        ArrayList<View.OnClickListener> listeners2 = new ArrayList<>();
+        listeners2.add(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateAnnouncementFragment caf = new CreateAnnouncementFragment();
+                Intent in = new Intent(CourseActivity.this, SubCourseActivity.class);
                 in.putExtra("fragment", Enumerators.CourseActions.CREATE_ANNOUNCEMENT);
                 in.putExtra("courseName", Session.selectedCourse.title);
                 startActivity(in);
             }
         });
         fragmentListenerLists.add(listeners);
-        fragmentListenerLists.add(listeners);
+        fragmentListenerLists.add(listeners2);
         fragmentListenerLists.add(listeners);
         return fragmentListenerLists;
     }

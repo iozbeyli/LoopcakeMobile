@@ -26,14 +26,22 @@ public class SubCourseActivity extends AppCompatActivity {
         Enumerators.CourseActions ca = (Enumerators.CourseActions) getIntent().getSerializableExtra("fragment");
         String courseName = getIntent().getExtras().getString("courseName");
         setTitle(courseName);
+        LCFragment fra = null;
         switch (ca){
             case CREATE_ANNOUNCEMENT:
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.add(R.id.subFrame, new CreateAnnouncementFragment());
-                ft.commit();
+                fra = new CreateAnnouncementFragment();
+                break;
+            case CREATE_PROJECT:
+                fra = new CreateProjectFragment();
                 break;
             default:
                 Log.wtf(TAG, "unknown course action");
         }
+        if(fra != null){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.subFrame, fra);
+            ft.commit();
+        }
+
     }
 }
