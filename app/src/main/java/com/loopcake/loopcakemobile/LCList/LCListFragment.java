@@ -21,6 +21,7 @@ public abstract class LCListFragment<T> extends Fragment implements LCListCarrie
 
     public int mColumnCount = 1;
     public View layout;
+    public RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public abstract class LCListFragment<T> extends Fragment implements LCListCarrie
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.fragment_item_list, container, false);
+        recyclerView = (RecyclerView)layout.findViewById(R.id.list);
         fillList();
         return layout;
     }
@@ -55,9 +57,8 @@ public abstract class LCListFragment<T> extends Fragment implements LCListCarrie
     public abstract void setItemContent(T item, View itemView);
 
     public void displayList(List<T> list, int itemID){
-        if(layout instanceof RecyclerView){
+        if(recyclerView instanceof RecyclerView){
             Context context = layout.getContext();
-            RecyclerView recyclerView = (RecyclerView) layout;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
