@@ -71,9 +71,8 @@ public class LoginActivity extends AppCompatActivity{
         });
 
         mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
-        loaderController= new ViewController.LoaderController(mLoginFormView,mProgressView,this);
+        mProgressView = findViewById(R.id.outside_loader);
+        loaderController= new ViewController.LoaderController(mProgressView,mLoginFormView,this);
     }
 
     private void attemptLogin() {

@@ -52,7 +52,7 @@ public abstract class LCExpandableFragment<T> extends Fragment implements LCExpa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.fragment_expandable_list, container, false);
-        progressBar = layout.findViewById(R.id.expandable_progress);
+        progressBar = layout.findViewById(R.id.outside_loader);
         expandableList = layout.findViewById(R.id.expandable_list);
         Log.d("Expandab", "onCreateView: "+expandableList.toString());
         loaderController = new ViewController.LoaderController(progressBar,expandableList,getActivity());

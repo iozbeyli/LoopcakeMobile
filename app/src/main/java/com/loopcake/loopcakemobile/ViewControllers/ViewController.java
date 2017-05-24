@@ -5,7 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
+
+import com.loopcake.loopcakemobile.R;
 
 /**
  * Created by Melih on 20.05.2017.
@@ -13,11 +16,16 @@ import android.view.View;
 
 public class ViewController {
     public static class LoaderController{
+        private View loader;
         private View progressBar;
         private Activity activity;
         private View rest;
-        public LoaderController(View progressBar,View rest, Activity activity){
-            this.progressBar = progressBar;
+        public LoaderController(View loader,View rest, Activity activity){
+            this.loader=loader;
+            this.progressBar = loader.findViewById(R.id.loader_progress_bar);
+            if(this.progressBar==null){
+                Log.wtf("progress","null");
+            }
             this.activity=activity;
             this.rest=rest;
         }
@@ -36,7 +44,7 @@ public class ViewController {
                         rest.setVisibility(show ? View.GONE : View.VISIBLE);
                     }
                 });
-                progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                loader.setVisibility(show ? View.VISIBLE : View.GONE);
                 progressBar.animate().setDuration(shortAnimTime).alpha(
                         show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                     @Override
@@ -47,7 +55,7 @@ public class ViewController {
             } else {
                 // The ViewPropertyAnimator APIs are not available, so simply show
                 // and hide the relevant UI components.
-                progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+                loader.setVisibility(show ? View.VISIBLE : View.GONE);
                 rest.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         }

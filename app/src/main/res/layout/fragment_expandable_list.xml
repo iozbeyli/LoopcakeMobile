@@ -4,13 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/expandable_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+    <include layout="@layout/included_loading_lc"/>
 
     <ExpandableListView
         android:id="@+id/expandable_list"
