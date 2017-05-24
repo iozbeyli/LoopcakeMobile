@@ -34,16 +34,21 @@ public class RepoFilesFragment extends LCFragment implements Communicator {
     Drawable folder;
     ArrayList<View> views;
     LinearLayout insertPoint;
-    private static class RepoFileView{
+    private class RepoFileView{
         public ArrayList<RepoFileView> subViews;
         public View view;
         public LCFile file;
+        private boolean isOpen=false;
         public RepoFileView(){
 
         }
-        public void addSubView(View toAdd,RelativeLayout layoutToAdd){
-            //RelativeLayout rLayout = (RelativeLayout)findViewById(R.id.yourRelativeId);
-            //rLParams.addRule(RelativeLayout.BELOW, viewtoBeBelow.getId());
+        public void displaySubViews(){
+            if(isOpen){
+                ((LinearLayout) view.findViewById(R.id.repo_file_child_layout)).removeAllViews();
+            }else{
+                RepoFilesFragment.this.displayFiles(file.children,100,(LinearLayout) view.findViewById(R.id.repo_file_child_layout));
+            }
+            isOpen=!isOpen;
         }
 
     }
@@ -72,8 +77,8 @@ public class RepoFilesFragment extends LCFragment implements Communicator {
                 }
             }
             Session.selectedRepo.files=repoFiles;
-            displayFiles(repoFiles,0);
-            reverseAllFiles();
+            displayFiles(repoFiles,0,insertPoint);
+            //reverseAllFiles();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -101,22 +106,22 @@ public class RepoFilesFragment extends LCFragment implements Communicator {
     }
 
 
-    public void displayFiles(ArrayList<LCFile> files,int leftPadding){
+    public void displayFiles(ArrayList<LCFile> files,int leftPadding,LinearLayout linearLayout){
         for(int i = 0;i<files.size();i++){
-            displayFile(files.get(i),leftPadding);
+            displayFile(files.get(i),leftPadding,linearLayout);
         }
     }
 
-    public void clickOnFile(final LCFile item){
-        if(item.fileType== Enumerators.FileType.FILE){
-            AsyncCommunicationTask fileContentComm = new AsyncCommunicationTask(Constants.getFileContentURL, RepoPostDatas.getRepoFileContentPostData(Session.selectedRepo.repoID, Session.user.userID, item.path), new Communicator() {
+    public void clickOnFile(final RepoFileView item){
+        if(item.file.fileType== Enumerators.FileType.FILE){
+            AsyncCommunicationTask fileContentComm = new AsyncCommunicationTask(Constants.getFileContentURL, RepoPostDatas.getRepoFileContentPostData(Session.selectedRepo.repoID, Session.user.userID, item.file.path), new Communicator() {
                 @Override
                 public void successfulExecute(JSONObject jsonObject) {
                     Log.d("code",jsonObject.toString());
                     try {
                         JSONObject fileDetails = jsonObject.getJSONObject("details");
-                        item.code = fileDetails.getString("data");
-                        Session.selectedFile = item;
+                        item.file.code = fileDetails.getString("data");
+                        Session.selectedFile = item.file;
                         Intent in = new Intent(getActivity(), SubRepoActivity.class);
                         startActivity(in);
                     } catch (JSONException e) {
@@ -130,16 +135,18 @@ public class RepoFilesFragment extends LCFragment implements Communicator {
                 }
             });
             fileContentComm.execute((Void)null);
+        }else{
+            item.displaySubViews();
         }
 
     }
 
-    public void displayFile(final LCFile item, int leftPadding){
+    public void displayFile(final LCFile item, int leftPadding,LinearLayout linearLayout){
         LayoutInflater vi = (LayoutInflater) getActivity().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = vi.inflate(R.layout.repo_file_child_item, null);
-        RepoFileView repoFileView = new RepoFileView();
+        final RepoFileView repoFileView = new RepoFileView();
         repoFileView.view = v;
-
+        repoFileView.file = item;
         TextView textView = (TextView) v.findViewById(R.id.repo_file_child_text);
         textView.setText(item.name);
         v.setPadding(leftPadding,0,0,0);
@@ -156,15 +163,15 @@ public class RepoFilesFragment extends LCFragment implements Communicator {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickOnFile(item);
+                clickOnFile(repoFileView);
             }
         });
         v.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
-        insertPoint.addView(v);
+        linearLayout.addView(v);
         if(item.children!=null){
-            displayFiles(item.children,leftPadding+100);
+
         }
     }
 
