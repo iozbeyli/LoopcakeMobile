@@ -60,5 +60,26 @@ public class RepoPostDatas{
         }
         return  reqData;
     }
+    public static JSONObject getRepoHistoryPostData(String repoID,String userID){
+        JSONObject reqData = new JSONObject();
+        try {
+            reqData.put("repo", repoID);
+            reqData.put("user", userID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  reqData;
+    }
+    public static JSONObject getRepoCheckoutPostData(String repoID,String userID,String branch){
+        JSONObject reqData = new JSONObject();
+        try {
+            reqData.put("repo", repoID);
+            reqData.put("user", userID);
+            reqData.put("branch",branch);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  reqData;
+    }
 
 }

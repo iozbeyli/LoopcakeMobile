@@ -22,12 +22,15 @@ public class Repo {
     public JSONArray membersJSONArray;
     public ArrayList<User> members;
     public ArrayList<LCFile> files;
+    public String currentBranch;
+    public String currentSha;
 
     public Repo(String position, String repoName, String repoID) {
         this.position = position;
         this.repoName = repoName;
         this.repoID = repoID;
     }
+
 
 
     @Override

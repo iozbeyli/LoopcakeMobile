@@ -27,7 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class RepoFilesFragment extends LCFragment implements Communicator {
+public class RepoFilesFragment extends LCFragment{
 
     ArrayList<LCFile> files;
     Drawable file;
@@ -64,33 +64,6 @@ public class RepoFilesFragment extends LCFragment implements Communicator {
     }
 
     @Override
-    public void successfulExecute(JSONObject jsonObject) {
-        Log.d("Repo Files response",jsonObject.toString());
-        try {
-            JSONArray filesJSONArray = jsonObject.getJSONArray("details");
-            ArrayList<LCFile> repoFiles = new ArrayList<>();
-            for(int i=0;i<filesJSONArray.length();i++){
-                JSONObject fileJSONObject = filesJSONArray.getJSONObject(i);
-                LCFile file = LCFile.newLCFile(fileJSONObject,null);
-                if(file!=null){
-                    repoFiles.add(file);
-                }
-            }
-            Session.selectedRepo.files=repoFiles;
-            displayFiles(repoFiles,0,insertPoint);
-            //reverseAllFiles();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void failedExecute() {
-
-    }
-
-    @Override
     public void mainFunction() {
         insertPoint = (LinearLayout) layout.findViewById(R.id.repo_file_fragment_layout);
         views = new ArrayList<>();
@@ -98,10 +71,10 @@ public class RepoFilesFragment extends LCFragment implements Communicator {
         file=ContextCompat.getDrawable(getActivity(),R.drawable.ic_stat_file);
         folder.setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
         file.setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
-        if(files==null){
-            AsyncCommunicationTask commFiles= new AsyncCommunicationTask(Constants.getFileListURL,RepoPostDatas.getRepoFileListPostData(Session.selectedRepo.repoID,Session.user.userID),this);
-            commFiles.execute((Void)null);
+        if(Session.selectedRepo.files!=null){
+            displayFiles(Session.selectedRepo.files,0,insertPoint);
         }
+
 
     }
 
@@ -170,15 +143,7 @@ public class RepoFilesFragment extends LCFragment implements Communicator {
                 LinearLayout.LayoutParams.FILL_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         linearLayout.addView(v);
-        if(item.children!=null){
-
-        }
     }
 
-    public void reverseAllFiles(){
-        insertPoint.removeAllViews();
-        for(int x = 0; x < views.size(); x++) {
-            insertPoint.addView(views.get(x));
-        }
-    }
+
 }

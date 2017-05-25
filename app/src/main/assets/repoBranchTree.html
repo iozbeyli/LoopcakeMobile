@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GitGraph.js example page</title>
+<link rel="stylesheet" type="text/css" href="gitgraph/gitgraph.css" />
+<style>
+#center {
+    text-align: center;
+}
+</style>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+</style>
+</head>
+<body id="center">
+  <script src="gitgraph/gitgraph.min.js"></script>
+  <canvas id="gitGraph"></canvas>
+  <script>
+
+
+  var myTemplateConfig = {
+  colors: [ "#34495e", "#9b59b6", "#3498db","#f1c40f","#2ecc71","#95a5a6","#e74c3c","#1abc9c","#e67e22" ], // branches colors, 1 per column
+  branch: {
+    lineWidth: 80,
+    spacingX: 300,                  // display branch names on graph
+  },
+  commit: {
+    spacingY: -500,
+    dot: {
+      size: 100
+    },
+    message: {
+      displayAuthor: true,
+      displayBranch: true,
+      displayHash: false,
+      font: "bold 30pt sans-serif"
+    },
+    shouldDisplayTooltipsInCompactMode: false, // default = true
+    tooltipHTMLFormatter: function ( commit ) {
+      return "" + commit.sha1 + "" + ": " + commit.message;
+    }
+  }
+};
+var myTemplate = new GitGraph.Template( myTemplateConfig );
+var config = {
+  template: myTemplate, // could be: "blackarrow" or "metro" or `myTemplate` (custom Template object)
+  reverseArrow: false, // to make arrows point to ancestors, if displayed
+  orientation: "vertical-reverse",
+  author:"",
+
+  // mode: "compact" // special compact mode: hide messages & compact graph
+};
+
+
+  var gitGraph = new GitGraph(config);
+  gitGraph.canvas.addEventListener( "commit:mouseover", function ( event ) {
+    console.log( "You're over a commit.", event.data.sha1 );
+    this.style.cursor = "pointer";
+  } );
+   var branches ={};
+
+   var drawCommit = function(commit){
+     console.log(commit);
+     console.log("branches",branches);
+     var branch = commit.log.branch[commit.log.branch.length-1];
+     branch = branch.substring(11,branch.length);
+     if(branches[branch]===undefined){
+       var newBranch = gitGraph.branch(branch);
+       branches[branch] = newBranch;
+     }
+     var day = commit.log.time.substring(0,10);
+     var hour = commit.log.time.substring(11,19);
+     var commitConfig = {
+       dotStrokeWidth: 10,
+       messageHashDisplay: false,
+       messageAuthorDisplay: false,
+       message: "Commit Message: "+commit.log.message+"  Time:"+day+" "+hour,
+       tooltipDisplay: false,
+       sha1: commit.log.sha,
+       onClick: function() {
+          console.log("Oh, you clicked my commit?!"+ commit.log.sha);
+        }
+     };
+     branches[branch].commit(commitConfig);
+
+     if(commit.children.length!==0){
+       commit.children.map((child)=>{
+         drawCommit(child);
+       });
+     }
+    }
+    //var responseString = '{"success":true,"details":[{"log":{"sha":"746f2e81afcb8e9a596ff61eb06263ca6e954e3c","message":"Mobile","time":"2017-05-22T17:11:08.000Z","branch":["refs\/heads\/develop","refs\/heads\/master"]},"children":[{"log":{"sha":"9b568f3b497a031a7f1ad5d321f808183d1f2ce3","message":"First Commit","time":"2017-05-23T13:12:04.000Z","branch":["refs\/heads\/develop","refs\/heads\/master"]},"children":[{"log":{"sha":"7ccaa9312754c6e07dd21027b160d08262b05d75","message":"First Commit","time":"2017-05-25T14:06:13.000Z","branch":["refs\/heads\/develop"]},"children":[]},{"log":{"sha":"2e5d011c5b606292cb64fe6bcd60212c5784445d","message":"First Commit","time":"2017-05-25T14:04:57.000Z","branch":["refs\/heads\/master"]},"children":[]}]}]}],"branches":["refs\/heads\/develop","refs\/heads\/master"]}';
+    var responseString = Android.getFromAndroid();
+    var response = JSON.parse(responseString);
+
+    response.map((commit)=>{
+      drawCommit(commit);
+    });
+
+    /*for(var key in branches){
+      var commitConfig = {
+        dotColor:"white",
+        dotSize: 20,
+        dotStrokeWidth: 10,
+        messageHashDisplay: false,
+        messageAuthorDisplay: false,
+        message: "",
+        sha1: "",
+        tooltipDisplay: false,
+        onClick: function() {
+           console.log("Oh, you clicked my commit?!"+ key);
+         }
+      };
+      branches[key].commit(commitConfig);
+    }*/
+
+    </script>
+  <script>
+    //var response = JSON.parse(Android.getFromAndroid());
+    //console.log("naber"+response[0].log.sha);
+  </script>
+  <!--<script src="gitgraph/index.js"></script>-->
+</body>
+</html>

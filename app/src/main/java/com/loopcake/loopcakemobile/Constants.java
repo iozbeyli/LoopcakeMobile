@@ -21,4 +21,6 @@ public class Constants {
 
     public final static String getFileListURL = gitAPIURL+"list";
     public final static String getFileContentURL = gitAPIURL+"getFileContent";
+    public final static String getFileHistoryURL = gitAPIURL+"getHistory";
+    public final static String getRepoCheckoutURL = gitAPIURL+"checkout";
 }

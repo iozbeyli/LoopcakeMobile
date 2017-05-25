@@ -8,6 +8,7 @@ import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
 import com.loopcake.loopcakemobile.PostDatas.RepoPostDatas;
+import com.loopcake.loopcakemobile.RepoFragments.LCFile;
 import com.loopcake.loopcakemobile.RepoFragments.RepoBranchTreeFragment;
 import com.loopcake.loopcakemobile.RepoFragments.RepoDetailsFragment;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
@@ -53,7 +54,9 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
         fabTexts.add("Naber");
         fragmentTextLists.add(fabTexts);
         fragmentTextLists.add(fabTexts);
-        fragmentTextLists.add(fabTexts);
+        ArrayList<String> fabTexts3 = new ArrayList<>();
+        fabTexts.add("Create Branch");
+        fragmentTextLists.add(fabTexts3);
         return fragmentTextLists;
     }
 
@@ -69,7 +72,14 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
         });
         fragmentListenerLists.add(listeners);
         fragmentListenerLists.add(listeners);
-        fragmentListenerLists.add(listeners);
+        ArrayList<View.OnClickListener> listeners3 = new ArrayList<>();
+        listeners.add(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("faa","a");
+            }
+        });
+        fragmentListenerLists.add(listeners3);
         return fragmentListenerLists;
     }
 
@@ -87,11 +97,42 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
             JSONArray members = repoDetails.getJSONArray("members");
             temp.membersJSONArray=members;
             Session.selectedRepo=temp;
+            AsyncCommunicationTask commFiles= new AsyncCommunicationTask(Constants.getFileListURL, RepoPostDatas.getRepoFileListPostData(Session.selectedRepo.repoID, Session.user.userID), new Communicator() {
+                @Override
+                public void successfulExecute(JSONObject jsonObject) {
+                    Log.d("Repo Files response",jsonObject.toString());
+                    try {
+                        JSONArray filesJSONArray = jsonObject.getJSONArray("details");
+                        ArrayList<LCFile> repoFiles = new ArrayList<>();
+                        for(int i=0;i<filesJSONArray.length();i++){
+                            JSONObject fileJSONObject = filesJSONArray.getJSONObject(i);
+                            LCFile file = LCFile.newLCFile(fileJSONObject,null);
+                            if(file!=null){
+                                repoFiles.add(file);
+                            }
+                        }
+                        Session.selectedRepo.files=repoFiles;
+                        Session.selectedRepo.currentSha=jsonObject.getString("head");
+                        Session.selectedRepo.currentBranch =jsonObject.getString("branch");
+                        setTabView();
+                        //reverseAllFiles();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void failedExecute() {
+
+                }
+            });
+            commFiles.execute((Void)null);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        setTabView();
+
     }
 
     @Override
