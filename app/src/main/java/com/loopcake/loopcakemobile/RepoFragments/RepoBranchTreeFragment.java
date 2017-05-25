@@ -16,6 +16,7 @@ import com.loopcake.loopcakemobile.Constants;
 import com.loopcake.loopcakemobile.LCFragment.LCFragment;
 import com.loopcake.loopcakemobile.PostDatas.RepoPostDatas;
 import com.loopcake.loopcakemobile.R;
+import com.loopcake.loopcakemobile.RepoActivity;
 import com.loopcake.loopcakemobile.Session;
 
 import org.json.JSONArray;
@@ -70,10 +71,26 @@ public class RepoBranchTreeFragment extends LCFragment implements Communicator{
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(arrayAdapter);
             spinner.setSelection(currentBranchPosition);
+            final int finalCurrentBranchPosition = currentBranchPosition;
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    //AsyncCommunicationTask checkoutComm = new AsyncCommunicationTask(Constants.getRepoCheckoutURL,RepoPostDatas.getRepoCheckoutPostData()
+                    if(finalCurrentBranchPosition !=position){
+                        AsyncCommunicationTask checkoutComm = new AsyncCommunicationTask(Constants.getRepoCheckoutURL, RepoPostDatas.getRepoCheckoutPostData(Session.selectedRepo.repoID, Session.user.userID, branchList.get(position)), new Communicator() {
+                            @Override
+                            public void successfulExecute(JSONObject jsonObject) {
+                                Log.d("Checkout response",jsonObject.toString());
+                                ((RepoActivity)getActivity()).onCreateFunction();
+                            }
+
+                            @Override
+                            public void failedExecute() {
+
+                            }
+                        });
+                        checkoutComm.execute((Void) null);
+                    }
+
                 }
 
                 @Override

@@ -58,7 +58,7 @@ var config = {
 
   var gitGraph = new GitGraph(config);
   gitGraph.canvas.addEventListener( "commit:mouseover", function ( event ) {
-    console.log( "You're over a commit.", event.data.sha1 );
+    console.log( "You're over a commit.", event );
     this.style.cursor = "pointer";
   } );
    var branches ={};
@@ -86,7 +86,7 @@ var config = {
         }
      };
      branches[branch].commit(commitConfig);
-
+     console.log(gitGraph);
      if(commit.children.length!==0){
        commit.children.map((child)=>{
          drawCommit(child);
