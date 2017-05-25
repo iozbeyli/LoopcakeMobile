@@ -18,6 +18,11 @@ public class ProjectChecklistFragment extends LCListFragment<ChecklistItem>{
     }
 
     @Override
+    public void setLayoutID() {
+
+    }
+
+    @Override
     protected void fillList() {
         ArrayList<ChecklistItem> items = new ArrayList<ChecklistItem>();
         try {
