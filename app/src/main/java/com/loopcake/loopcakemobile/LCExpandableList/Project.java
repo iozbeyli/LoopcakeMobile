@@ -14,6 +14,7 @@ public class Project {
     public String deadline;
     public HashMap<String,Pair<Boolean,Integer>> checklist;
     public String course;
+    public int maxSize;
 
     public Project(String id, String title, String deadline, HashMap<String,Pair<Boolean,Integer>> checklist,String course){
         this.id=id;

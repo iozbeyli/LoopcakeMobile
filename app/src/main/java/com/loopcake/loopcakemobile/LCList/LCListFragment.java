@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;

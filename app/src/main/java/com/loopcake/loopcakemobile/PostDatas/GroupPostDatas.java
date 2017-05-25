@@ -1,5 +1,7 @@
 package com.loopcake.loopcakemobile.PostDatas;
 
+import android.util.Log;
+
 import com.loopcake.loopcakemobile.Session;
 
 import org.json.JSONException;
@@ -22,8 +24,8 @@ public class GroupPostDatas {
     public static JSONObject getGroupDetailsPostData(){
         JSONObject postData = new JSONObject();
         try {
-            postData.put("operation","2");
-            postData.put("id", Session.selectedID);
+            postData.put("operation","3");
+            postData.put("projectid", Session.selectedID);
         } catch (JSONException e) {
             e.printStackTrace();
         }

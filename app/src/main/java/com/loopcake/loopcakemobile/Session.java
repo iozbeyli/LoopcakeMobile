@@ -1,5 +1,6 @@
 package com.loopcake.loopcakemobile;
 
+import com.loopcake.loopcakemobile.LCExpandableList.Project;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Course;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
 import com.loopcake.loopcakemobile.RepoFragments.LCFile;
@@ -21,6 +22,7 @@ public class Session {
    public static Course selectedCourse;
    public static Repo selectedRepo;
    public static LCFile selectedFile;
+   public static Project project;
 }
 
 
