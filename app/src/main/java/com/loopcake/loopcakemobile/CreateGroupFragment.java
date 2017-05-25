@@ -26,7 +26,12 @@ import java.util.ArrayList;
 
 public class CreateGroupFragment extends LCListFragment<StudentSelect> implements Communicator{
     private ArrayList<String> selectedIDs = new ArrayList<>();
-    
+
+    @Override
+    public void setLayoutID() {
+        layoutID = R.layout.fragment_create_group;
+    }
+
     @Override
     protected void fillList() {
         try {

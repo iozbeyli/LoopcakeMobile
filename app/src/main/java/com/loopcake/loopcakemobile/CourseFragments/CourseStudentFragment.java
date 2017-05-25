@@ -55,6 +55,11 @@ public class CourseStudentFragment extends LCListFragment<User> implements Commu
     }
 
     @Override
+    public void setLayoutID() {
+
+    }
+
+    @Override
     protected void fillList() {
         AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getStudentURL, CoursePostDatas.getCourseStudentPostData(),this);
         asyncCommunicationTask.execute((Void)null);

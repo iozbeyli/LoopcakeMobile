@@ -24,6 +24,11 @@ public class RepoListFragment extends LCListFragment<Repo> implements Communicat
     }
 
     @Override
+    public void setLayoutID() {
+
+    }
+
+    @Override
     protected void fillList() {
         AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, RepoPostDatas.getRepoListPostData(),this);
         asyncCommunicationTask.execute((Void) null);

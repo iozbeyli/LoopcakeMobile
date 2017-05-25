@@ -38,6 +38,11 @@ public class ProjectListFragment extends LCListFragment<Project> implements Comm
     }
 
     @Override
+    public void setLayoutID() {
+
+    }
+
+    @Override
     public void fillList() {
         AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getCourseURL, CoursePostDatas.getCoursePostData(),this);
         asyncCommunicationTask.execute((Void) null);

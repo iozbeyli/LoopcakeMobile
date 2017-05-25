@@ -25,6 +25,11 @@ import java.util.ArrayList;
 
 public class RepoStudentListFragment extends LCListFragment<User> implements Communicator{
     @Override
+    public void setLayoutID() {
+
+    }
+
+    @Override
     protected void fillList() {
         AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.apiURL+"user", RepoPostDatas.getRepoMembersPostData(Session.selectedRepo.membersJSONArray),this);
         asyncCommunicationTask.execute((Void) null);
