@@ -23,6 +23,7 @@ public abstract class LCListFragment<T> extends Fragment implements LCListCarrie
     public int mColumnCount = 1;
     public View layout;
     public RecyclerView recyclerView;
+    public int layoutID = R.layout.fragment_item_list;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,10 +31,14 @@ public abstract class LCListFragment<T> extends Fragment implements LCListCarrie
 
     }
 
+    public abstract void setLayoutID();
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        layout = inflater.inflate(R.layout.fragment_item_list, container, false);
+        setLayoutID();
+        layout = inflater.inflate(layoutID, container, false);
         recyclerView = (RecyclerView)layout.findViewById(R.id.list);
         fillList();
         return layout;

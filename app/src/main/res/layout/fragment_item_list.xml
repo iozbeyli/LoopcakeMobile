@@ -7,19 +7,6 @@
     tools:context="com.loopcake.loopcakemobile.CourseListFragment"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:layoutManager="LinearLayoutManager"
-
-            tools:listitem="@layout/fragment_item" />
-    </ScrollView>
-
+    <include layout="@layout/included_list"/>
 </LinearLayout>
 
