@@ -1,25 +1,39 @@
 package com.loopcake.loopcakemobile;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.Enumerators.Enumerators;
 import com.loopcake.loopcakemobile.PostDatas.GroupPostDatas;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.graphics.Typeface.BOLD;
+import static com.loopcake.loopcakemobile.Enumerators.Enumerators.CourseActions.ADD_STUDENTS;
+import static com.loopcake.loopcakemobile.Enumerators.Enumerators.CourseActions.CREATE_ANNOUNCEMENT;
+import static com.loopcake.loopcakemobile.Enumerators.Enumerators.CourseActions.CREATE_PROJECT;
+import static com.loopcake.loopcakemobile.Enumerators.Enumerators.CourseActions.EDIT_COURSE;
 import static com.loopcake.loopcakemobile.Enumerators.Enumerators.ProjectActions.CREATE_GROUP;
+import static com.loopcake.loopcakemobile.Enumerators.Enumerators.ProjectActions.GROUP_MEMBER;
 
 public class ProjectActivity extends LCTabbedActivity implements Communicator {
+    private final static String TAG = "ProjectActivity";
 
     @Override
     public void onCreateFunction() {
@@ -43,35 +57,25 @@ public class ProjectActivity extends LCTabbedActivity implements Communicator {
         return new SectionsPagerAdapter(getSupportFragmentManager(),fragments,pageTitles);
     }
 
+
     @Override
     public ArrayList<ArrayList<String>> setTextListsForFragments() {
-        ArrayList<ArrayList<String>> fragmentTextLists=new ArrayList<>();
-        ArrayList<String> fabTexts = new ArrayList<>();
-        fabTexts.add("Naber");
-        fragmentTextLists.add(fabTexts);
-        fabTexts = new ArrayList<>();
-        fabTexts.add("Nabe");
-        fragmentTextLists.add(fabTexts);
-        fragmentTextLists.add(fabTexts);
-        return fragmentTextLists;
+        return createFABTexts(new String[][]{
+                {null, null, null},
+                {"Members", null, null},
+                {null, null, null}
+        });
+
     }
 
     @Override
     public ArrayList<ArrayList<View.OnClickListener>> setListenerListsForFragments() {
-        ArrayList<ArrayList<View.OnClickListener>> fragmentListenerLists = new ArrayList<>();
-        ArrayList<View.OnClickListener> listeners = new ArrayList<>();
-        listeners.add(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("faa","a");
-            }
+        return createFABListeners(new Enumerators.ProjectActions[][]{
+                {null, null, null},
+                {GROUP_MEMBER, null, null},
+                {null, null, null}
         });
-        fragmentListenerLists.add(listeners);
-        fragmentListenerLists.add(listeners);
-        fragmentListenerLists.add(listeners);
-        return fragmentListenerLists;
     }
-
     @Override
     public void successfulExecute(JSONObject jsonObject) {
         Log.d("execute", "successfulExecute: ");
@@ -100,5 +104,45 @@ public class ProjectActivity extends LCTabbedActivity implements Communicator {
     @Override
     public void failedExecute() {
         Log.d("execute", "failedExecute: ");
+    }
+
+    private ArrayList<ArrayList<View.OnClickListener>> createFABListeners(Enumerators.ProjectActions[][] act){
+        ArrayList<ArrayList<View.OnClickListener>> fragmentListenerLists = new ArrayList<>();
+        for (int i = 0; i < 3 ; i++) {
+            ArrayList<View.OnClickListener> listeners = new ArrayList<>();
+            for (int j = 0; j < 3 ; j++) {
+                if(act[i][j] != null)
+                    listeners.add(createFABListener(act[i][j]));
+            }
+            fragmentListenerLists.add(listeners);
+        }
+        return fragmentListenerLists;
+    }
+
+
+    private View.OnClickListener createFABListener(final Enumerators.ProjectActions act){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(ProjectActivity.this, SubProjectActivity.class);
+                in.putExtra("fragment", act);
+                startActivity(in);
+            }
+        };
+    }
+
+
+    private ArrayList<ArrayList<String>> createFABTexts(String[][] lab){
+        ArrayList<ArrayList<String>> labelList = new ArrayList<>();
+        for (int i = 0; i < 3 ; i++) {
+            ArrayList<String> labels = new ArrayList<>();
+            for (int j = 0; j < 3 ; j++) {
+                if(lab[i][j] != null)
+                    labels.add(lab[i][j]);
+            }
+            labelList.add(labels);
+        }
+
+        return labelList;
     }
 }

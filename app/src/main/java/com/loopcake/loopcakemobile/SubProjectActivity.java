@@ -1,6 +1,7 @@
 package com.loopcake.loopcakemobile;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,10 +28,13 @@ public class SubProjectActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Enumerators.ProjectActions ca = (Enumerators.ProjectActions) getIntent().getSerializableExtra("fragment");
         setTitle(Session.project.title);
-        LCListFragment<StudentSelect> fra = null;
+        Fragment fra = null;
         switch (ca){
             case CREATE_GROUP:
                 fra = new CreateGroupFragment();
+                break;
+            case GROUP_MEMBER:
+                fra = new GroupMemberFragment();
                 break;
             default:
                 Log.wtf(TAG, "unknown course action");
