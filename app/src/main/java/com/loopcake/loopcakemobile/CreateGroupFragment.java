@@ -1,17 +1,18 @@
 package com.loopcake.loopcakemobile;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.LCList.LCListFragment;
-import com.loopcake.loopcakemobile.LCList.LCListItems.ChecklistItem;
-import com.loopcake.loopcakemobile.LCList.LCListItems.Course;
 import com.loopcake.loopcakemobile.ListContents.StudentSelect;
 
 import org.json.JSONArray;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 
 public class CreateGroupFragment extends LCListFragment<StudentSelect> implements Communicator{
     private ArrayList<String> selectedIDs = new ArrayList<>();
+    private static final String TAG = "CreateGroup";
 
     @Override
     public void setLayoutID() {
@@ -40,6 +42,38 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
             post.put("projectid", Session.project.id);
             AsyncCommunicationTask task = new AsyncCommunicationTask(Constants.apiURL+"/getNonGroup",post,this);
             task.execute((Void)null);
+            final EditText editName = (EditText) layout.findViewById(R.id.edit_group_name);
+            ((TextView)layout.findViewById(R.id.label_max_size)).setText("Select group members. (Max group size is "+Session.project.maxSize+")");
+            ((Button)layout.findViewById(R.id.create_group)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    JSONObject post = new JSONObject();
+                    try {
+                        post.put("courseid", Session.project.course);
+                        post.put("projectid", Session.project.id);
+                        post.put("name", editName.getText());
+                        post.put("students", new JSONArray(selectedIDs));
+                        post.put("deadline", Session.project.deadline);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    AsyncCommunicationTask task = new AsyncCommunicationTask(Constants.apiURL + "/addGroup", post, new Communicator() {
+                        @Override
+                        public void successfulExecute(JSONObject jsonObject) {
+                            Toast.makeText(getContext(),jsonObject.toString(),Toast.LENGTH_LONG).show();
+                            Session.selectedID = Session.project.id;
+                            Intent intent = new Intent(getActivity(),ProjectActivity.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void failedExecute() {
+
+                        }
+                    });
+                    task.execute((Void)null);
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -66,21 +100,27 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
     public void setItemContent(final StudentSelect item, View itemView) {
         Switch check = (Switch)itemView.findViewById(R.id.checklist_switch);
         check.setText(item.name+" "+item.surname);
-        check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    if(selectedIDs.size()<Session.project.maxSize){
-                        selectedIDs.add(item.id);
+        if(item.id.equals(Session.user.userID)){
+            check.setChecked(true);
+            check.setClickable(false);
+            selectedIDs.add(Session.user.userID);
+        }else{
+            check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        if(selectedIDs.size()<Session.project.maxSize){
+                            selectedIDs.add(item.id);
+                        }else{
+                            Snackbar.make(layout, "Max group size is "+Session.project.maxSize,Snackbar.LENGTH_LONG).show();
+                            buttonView.setChecked(false);
+                        }
                     }else{
-                        Snackbar.make(layout, "Max group size is "+Session.project.maxSize,Snackbar.LENGTH_LONG).show();
-                        buttonView.setChecked(false);
+                        selectedIDs.remove(item.id);
                     }
-                }else{
-                    selectedIDs.remove(item.id);
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -99,7 +139,7 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                displayList(students,R.layout.fragment_project_checklist);
+                displayList(students,R.layout.fragment_project_checkpoint);
             }
         } catch (JSONException e) {
             e.printStackTrace();

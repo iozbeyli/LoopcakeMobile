@@ -18,7 +18,7 @@ public class Session {
    public static String token = "";
    public static User user=null;
    public static String selectedID = "";
-   public static JSONObject selectedProject;
+   public static JSONObject selectedGroup;
    public static Course selectedCourse;
    public static Repo selectedRepo;
    public static LCFile selectedFile;

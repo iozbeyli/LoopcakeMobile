@@ -1,7 +1,6 @@
 package com.loopcake.loopcakemobile;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,12 +9,9 @@ import android.widget.Toast;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
-import com.loopcake.loopcakemobile.Enumerators.Enumerators;
-import com.loopcake.loopcakemobile.LCExpandableList.Project;
 import com.loopcake.loopcakemobile.PostDatas.GroupPostDatas;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,7 +75,7 @@ public class ProjectActivity extends LCTabbedActivity implements Communicator {
     @Override
     public void successfulExecute(JSONObject jsonObject) {
         Log.d("execute", "successfulExecute: ");
-        Session.selectedProject = jsonObject;
+        Session.selectedGroup = jsonObject;
         try {
             if(!jsonObject.isNull("details")) {
                 Object res = jsonObject.getJSONArray("details").get(0);
@@ -89,6 +85,8 @@ public class ProjectActivity extends LCTabbedActivity implements Communicator {
                     in.putExtra("fragment", CREATE_GROUP);
                     startActivity(in);
                 }else{
+                    Session.selectedGroup = jsonObject.getJSONArray("details").getJSONObject(0);
+                    setTitle(Session.selectedGroup.getString("name"));
                     setTabView();
                 }
             }else{
