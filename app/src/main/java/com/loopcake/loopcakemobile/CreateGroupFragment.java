@@ -2,16 +2,19 @@ package com.loopcake.loopcakemobile;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.AsyncCommunication.ImageDownloaderTask;
 import com.loopcake.loopcakemobile.LCList.LCListFragment;
 import com.loopcake.loopcakemobile.ListContents.StudentSelect;
 
@@ -98,7 +101,7 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
 
     @Override
     public void setItemContent(final StudentSelect item, View itemView) {
-        Switch check = (Switch)itemView.findViewById(R.id.checklist_switch);
+        Switch check = (Switch)itemView.findViewById(R.id.user_switch);
         check.setText(item.name+" "+item.surname);
         if(item.id.equals(Session.user.userID)){
             check.setChecked(true);
@@ -121,6 +124,10 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
                 }
             });
         }
+
+        ImageView iv = (ImageView)itemView.findViewById(R.id.user_photo);
+        ImageDownloaderTask task = new ImageDownloaderTask(iv, item.photo, layout.getContext());
+        task.execute((String[]) null);
     }
 
     @Override
@@ -132,14 +139,16 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
                 JSONObject student = null;
                 try {
                     student = array.getJSONObject(i);
+                    Log.d(TAG, "successfulExecute: "+student);
                     String name = student.getString("name");
                     String surname = student.getString("surname");
                     String id = student.getString("_id");
-                    students.add(new StudentSelect(name,surname,id));
+                    String photo = student.getString("photo");
+                    students.add(new StudentSelect(name,surname,id, photo));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                displayList(students,R.layout.fragment_project_checkpoint);
+                displayList(students,R.layout.user_switch_item);
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -81,7 +81,7 @@ public class MainActivity extends LCDrawerActivity implements NavigationView.OnN
             TextView name = (TextView) headerView.findViewById(R.id.drawer_user_name);
             name.setText(Session.user.name+" "+Session.user.surname);
             ImageView iv = (ImageView) headerView.findViewById(R.id.drawer_user_photo);
-            ImageDownloaderTask task = new ImageDownloaderTask(iv, Constants.apiURL+"/download?_id="+Session.user.photoID,getBaseContext());
+            ImageDownloaderTask task = new ImageDownloaderTask(iv, Session.user.photoID,getBaseContext());
             task.execute((String[]) null);
         }
 

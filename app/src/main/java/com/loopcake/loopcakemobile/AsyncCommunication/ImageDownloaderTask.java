@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.loopcake.loopcakemobile.Constants;
 import com.loopcake.loopcakemobile.Session;
 
 import org.json.JSONException;
@@ -29,18 +30,20 @@ import java.net.URL;
  */
 
 public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+    private final static String TAG = "ImageDownloaderTask";
 
     private final WeakReference<ImageView> imageViewReference;
     //private final MemoryCache memoryCache;
     //private final BrandItem brandCatogiriesItem;
     private Context context;
+    private final String baseUrl= Constants.apiURL+"/download?_id=";
     private String url;
 
-    public ImageDownloaderTask(ImageView imageView, String url, Context context) {
+    public ImageDownloaderTask(ImageView imageView, String id, Context context) {
         imageViewReference = new WeakReference<ImageView>(imageView);
         //memoryCache = new MemoryCache();
         //brandCatogiriesItem = new BrandItem();
-        this.url = url;
+        this.url = baseUrl+id;
         this.context = context;
     }
 
@@ -66,6 +69,7 @@ public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
                     // BrandCatogiriesItem.saveLocalBrandOrCatogiries(context, brandCatogiriesItem);
                     imageView.setImageBitmap(bitmap);
                 } else {
+                    Log.d(TAG, "onPostExecute: bitmap null");
                     /*Drawable placeholder = imageView.getContext().getResources().getDrawable(R.drawable.placeholder);
                     imageView.setImageDrawable(placeholder);*/
                 }
@@ -87,12 +91,12 @@ public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
 
             InputStream inputStream = urlConnection.getInputStream();
             if (inputStream != null) {
-
+                Log.d(TAG, "downloadBitmap: "+inputStream);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 return bitmap;
             }
         } catch (Exception e) {
-            Log.d("URLCONNECTIONERROR", e.toString());
+            Log.e(TAG, "URLCONNECTIONERROR", e);
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
