@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.AsyncCommunication.ImageDownloaderTask;
 import com.loopcake.loopcakemobile.LCElements.LCDrawerActivity;
 import com.loopcake.loopcakemobile.TwoFactorAuthentication.TwoFactorAuthenticationFragment;
 
@@ -79,6 +80,9 @@ public class MainActivity extends LCDrawerActivity implements NavigationView.OnN
             email.setText(Session.user.email);
             TextView name = (TextView) headerView.findViewById(R.id.drawer_user_name);
             name.setText(Session.user.name+" "+Session.user.surname);
+            ImageView iv = (ImageView) headerView.findViewById(R.id.drawer_user_photo);
+            ImageDownloaderTask task = new ImageDownloaderTask(iv, Constants.apiURL+"/download?_id="+Session.user.photoID,getBaseContext());
+            task.execute((String[]) null);
         }
 
     }
