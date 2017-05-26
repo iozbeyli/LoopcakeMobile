@@ -5,13 +5,14 @@ package com.loopcake.loopcakemobile.LCList.LCListItems;
  */
 
 public class ChecklistItem {
-    private String detail;
+    private int point;
 
-    public String getDetail() {
-        return detail;
+    public int getPoint() {
+        return point;
     }
 
     private String _id;
+    private String label;
 
     public String getId() {
         return _id;
@@ -33,10 +34,34 @@ public class ChecklistItem {
         status = !status;
     }
 
-    public ChecklistItem(String detail,boolean status, String _id, String cpid){
-        this.detail = detail;
+    public String getDetail() {
+        return detail;
+    }
+
+    private String detail;
+
+    public ChecklistItem(int point,boolean status, String _id, String cpid, String detail, String label){
+        this.point = point;
         this.status = status;
         this._id = _id;
         this.cpid = cpid;
+        this.detail = detail;
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public String toString() {
+        return "ChecklistItem{" +
+                "point=" + point +
+                ", _id='" + _id + '\'' +
+                ", label='" + label + '\'' +
+                ", cpid='" + cpid + '\'' +
+                ", status=" + status +
+                ", detail='" + detail + '\'' +
+                '}';
     }
 }
