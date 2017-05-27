@@ -10,10 +10,18 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.AsyncCommunication.ImageDownloaderTask;
+import com.loopcake.loopcakemobile.AsyncCommunication.NotificationHandler;
 import com.loopcake.loopcakemobile.LCElements.LCDrawerActivity;
 import com.loopcake.loopcakemobile.TwoFactorAuthentication.TwoFactorAuthenticationFragment;
 
@@ -63,6 +71,12 @@ public class MainActivity extends LCDrawerActivity implements NavigationView.OnN
             setDrawerUserInfo();
             GetUserImage userImage = new GetUserImage(photoID);
             userImage.execute((Void)null);
+
+            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            send(refreshedToken);
+            NotificationHandler.sendNotificationToUser(new String[]{user.userID}, "test", "Logged in");
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -113,4 +127,32 @@ public class MainActivity extends LCDrawerActivity implements NavigationView.OnN
             return null;
         }
     }
+
+    private void send(String token){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference devicesref = database.getReference("devices");
+        devicesref.child(Session.user.userID).setValue(token);
+        devicesref.addListenerForSingleValueEvent(eventListener);
+    }
+
+    private ValueEventListener eventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot snapshot) {
+            if (snapshot == null || snapshot.getValue() == null){
+                Toast.makeText(MainActivity.this,
+                        "No record found",
+                        Toast.LENGTH_LONG).show();
+            }
+            else {/*Toast.makeText(MainActivity.this,
+                    snapshot.getValue().toString(),
+                    Toast.LENGTH_LONG).show();*/
+                //showProgress(false);
+            }
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError error) {
+        }
+    };
 }

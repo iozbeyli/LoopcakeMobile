@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "764490334099",
+    "firebase_url": "https://loopcake-9b212.firebaseio.com",
+    "project_id": "loopcake-9b212",
+    "storage_bucket": "loopcake-9b212.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764490334099:android:d6add93534ad937b",
+        "android_client_info": {
+          "package_name": "com.loopcake.loopcakemobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764490334099-oo6s7igt04taupaf1r8ueisp3b90927j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdXn7DjH6BcIDRFNCXajZNH9uOp-KY04g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

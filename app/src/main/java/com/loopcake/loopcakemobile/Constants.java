@@ -8,6 +8,7 @@ import android.graphics.Color;
 
 public class Constants {
     public final static String apiURL = "http://207.154.203.163:8000/api/";
+    public final static String notificationURL = "https://us-central1-loopcake-9b212.cloudfunctions.net/sendNotification";
     //public final static String apiURL = "http://172.20.156.37:8000/api/";
     public final static String gitAPIURL="http://207.154.203.163:9560/api/";
     public final static int colorPrimary = Color.parseColor("#2C3E50");
