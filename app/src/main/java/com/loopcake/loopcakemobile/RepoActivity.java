@@ -1,6 +1,8 @@
 package com.loopcake.loopcakemobile;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 
@@ -10,6 +12,7 @@ import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
 import com.loopcake.loopcakemobile.PostDatas.RepoPostDatas;
 import com.loopcake.loopcakemobile.RepoFragments.LCFile;
 import com.loopcake.loopcakemobile.RepoFragments.RepoBranchTreeFragment;
+import com.loopcake.loopcakemobile.RepoFragments.RepoCodeFragment;
 import com.loopcake.loopcakemobile.RepoFragments.RepoDetailsFragment;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
 
@@ -24,6 +27,7 @@ import java.util.ArrayList;
  */
 
 public class RepoActivity extends LCTabbedActivity implements Communicator{
+
     @Override
     public void onCreateFunction() {
         AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, RepoPostDatas.getRepoDetailsPostData(Session.selectedRepo.repoID),this);
@@ -138,5 +142,18 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
     @Override
     public void failedExecute() {
 
+    }
+
+    public void viewCodeFile(){
+        if(getResources().getBoolean(R.bool.tablet_view)){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment fragment = new RepoCodeFragment();
+            ft.replace(R.id.tabbed_frame, fragment, "visible_fragment");
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.commit();
+        }else{
+            Intent in = new Intent(this, SubRepoActivity.class);
+            startActivity(in);
+        }
     }
 }

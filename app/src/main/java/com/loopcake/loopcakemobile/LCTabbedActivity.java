@@ -1,5 +1,6 @@
 package com.loopcake.loopcakemobile;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -40,6 +41,9 @@ public abstract class LCTabbedActivity extends AppCompatActivity{
     protected SubFabController subFabController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(getResources().getBoolean(R.bool.portrait_only)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         super.onCreate(savedInstanceState);
         subFabs = new ArrayList<FloatingActionButton>();
         subFabTexts = new ArrayList<>();

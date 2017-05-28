@@ -95,8 +95,8 @@ public class RepoFilesFragment extends LCFragment{
                         JSONObject fileDetails = jsonObject.getJSONObject("details");
                         item.file.code = fileDetails.getString("data");
                         Session.selectedFile = item.file;
-                        Intent in = new Intent(getActivity(), SubRepoActivity.class);
-                        startActivity(in);
+                        RepoActivity activity = (RepoActivity) getActivity();
+                        activity.viewCodeFile();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
