@@ -74,7 +74,6 @@ public class MainActivity extends LCDrawerActivity implements NavigationView.OnN
 
             String refreshedToken = FirebaseInstanceId.getInstance().getToken();
             send(refreshedToken);
-            NotificationHandler.sendNotificationToUser(new String[]{user.userID}, "test", "Logged in");
 
 
         } catch (JSONException e) {
