@@ -50,7 +50,7 @@ public class ProjectDetailFragment extends LCFragment {
             course.setText(project.course.name+" "+project.course.code);
             setInstructorCard();
             group_name.append(jsonObject.getString("name"));
-            group_details.setText(jsonObject.getString("details"));
+            //group_details.setText(jsonObject.getString("details"));
 
         } catch (JSONException e) {
             e.printStackTrace();
