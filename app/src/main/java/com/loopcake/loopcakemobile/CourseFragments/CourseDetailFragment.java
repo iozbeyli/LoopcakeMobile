@@ -1,7 +1,11 @@
 package com.loopcake.loopcakemobile.CourseFragments;
 
+import android.app.DownloadManager;
+import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +20,8 @@ import com.loopcake.loopcakemobile.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 public class CourseDetailFragment extends LCFragment implements Communicator{
 
@@ -45,15 +51,13 @@ public class CourseDetailFragment extends LCFragment implements Communicator{
         try {
             String details = "";
             String langs = "";
-            String syllabus= null;
             JSONArray array = jsonObject.getJSONArray("details");
-            JSONObject course = array.getJSONObject(0);
-            String courseName = course.getString("name");
+            final JSONObject course = array.getJSONObject(0);
+            final String courseName = course.getString("name");
             String code = course.getString("code");
             String instructor = course.getString("instructor");
             if(!course.isNull("details")) details = course.getString("details");
             if(!course.isNull("programmingLanguage"))  langs = course.getString("programmingLanguage");
-            if(!course.isNull("syllabus")) syllabus = course.getString("syllabus");
             Session.selectedCourse.code = code;
             Session.selectedCourse.instructor = instructor;
             Session.selectedCourse.details = details;
@@ -63,11 +67,28 @@ public class CourseDetailFragment extends LCFragment implements Communicator{
             courseNameView.setText(courseName+" "+code);
             TextView detail = (TextView)layout.findViewById(R.id.label_course_detail);
             detail.append(details);
-            TextView syllabusView = (TextView)layout.findViewById(R.id.label_syllabus);
-            if(syllabus != null)
-                syllabusView.setText(syllabus);
-            else
-                syllabusView.setVisibility(View.GONE);
+            Button button_syllabus = (Button)layout.findViewById(R.id.download_syllabus);
+            if(!course.isNull("syllabus")){
+                button_syllabus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DownloadManager manager = (DownloadManager)getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                        Uri uri = null;
+                        try {
+                            uri = Uri.parse(Constants.apiURL+"/download?_id="+course.getString("syllabus"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        DownloadManager.Request req = new DownloadManager.Request(uri);
+                        req.setDestinationInExternalPublicDir(DIRECTORY_DOWNLOADS,courseName+"-syllabus.pdf");
+                        req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        Long reference = manager.enqueue(req);
+                    }
+                });
+            } else{
+                button_syllabus.setVisibility(View.GONE);
+            }
+
 
             TextView prog = (TextView) layout.findViewById(R.id.label_programming_langs);
             prog.append(langs);

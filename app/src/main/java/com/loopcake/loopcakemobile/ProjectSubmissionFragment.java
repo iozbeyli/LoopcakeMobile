@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
@@ -23,7 +25,7 @@ import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 
 public class ProjectSubmissionFragment extends LCListFragment<ProjectSubmissionFragment.Attachment> implements Communicator {
-
+    private String submissionid = "";
     @Override
     public void successfulExecute(JSONObject jsonObject) {
         JSONObject submission = new JSONObject();
@@ -31,6 +33,7 @@ public class ProjectSubmissionFragment extends LCListFragment<ProjectSubmissionF
         String date="";
         try {
             submission = jsonObject.getJSONArray("details").getJSONObject(0);
+            submissionid = submission.getString("_id");
             attachs = submission.getJSONArray("attachment");
             date = submission.getString("date");
         } catch (JSONException e) {
@@ -84,8 +87,38 @@ public class ProjectSubmissionFragment extends LCListFragment<ProjectSubmissionF
 
     @Override
     protected void fillList() {
-        if(Session.selectedGroup.isNull("repo"))
-            layout.findViewById(R.id.attach_repo).setVisibility(View.GONE);
+        Button button_attach_repo = (Button)layout.findViewById(R.id.attach_repo);
+        if(Session.selectedGroup.isNull("repo")){
+            button_attach_repo.setVisibility(View.GONE);
+        }else{
+            button_attach_repo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    JSONObject post = new JSONObject();
+                    try {
+                        post.put("submissionid", submissionid);
+                        post.put("repo",Session.selectedGroup.getString("repo"));
+                        post.put("deadline",Session.project.deadline);
+                        post.put("groupname",Session.selectedGroup.getString("name"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    AsyncCommunicationTask task = new AsyncCommunicationTask(Constants.apiURL + "/submitRepo", post, new Communicator() {
+                        @Override
+                        public void successfulExecute(JSONObject jsonObject) {
+                            //Toast.makeText(getContext(),"Successful", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void failedExecute() {
+                            //Toast.makeText(getContext(),"Failed", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    task.execute((Void)null);
+                }
+            });
+        }
         JSONObject post = new JSONObject();
         try {
             post.put("groupID", Session.selectedGroup.getString("_id"));
@@ -104,8 +137,49 @@ public class ProjectSubmissionFragment extends LCListFragment<ProjectSubmissionF
     }
 
     @Override
-    public void setItemContent(Attachment item, View itemView) {
-        ((TextView)itemView.findViewById(R.id.filename)).setText(item.filename);
+    public void setItemContent(final Attachment item, final View itemView) {
+        TextView tv = (TextView)itemView.findViewById(R.id.filename);
+        tv.setText(item.filename);
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DownloadManager manager = (DownloadManager)getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+                Uri uri = Uri.parse(Constants.apiURL+"/download?_id="+item.id);
+                DownloadManager.Request req = new DownloadManager.Request(uri);
+                req.setDestinationInExternalPublicDir(DIRECTORY_DOWNLOADS,item.filename);
+                req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                Long reference = manager.enqueue(req);
+            }
+        });
+
+        ImageView iv = (ImageView) itemView.findViewById(R.id.remove_icon);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject post = new JSONObject();
+                try {
+                    post.put("operation", "2");
+                    post.put("submissionid", submissionid);
+                    post.put("attachmentid", item.id);
+                    post.put("deadline", Session.project.deadline);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                AsyncCommunicationTask task = new AsyncCommunicationTask(Constants.apiURL + "/remove", post, new Communicator() {
+                    @Override
+                    public void successfulExecute(JSONObject jsonObject) {
+                        itemView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void failedExecute() {
+
+                    }
+                });
+                task.execute((Void) null);
+            }
+        });
+
     }
 
     public class Attachment{

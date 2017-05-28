@@ -31,16 +31,6 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/label_syllabus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="Syllabus"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="16sp" />
-
-        <TextView
             android:id="@+id/label_programming_langs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,6 +49,16 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <include layout="@layout/user_item" />
+
+        <Button
+            android:id="@+id/download_syllabus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:text="syllabus"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:padding="10dp"/>
 
     </LinearLayout>
 
