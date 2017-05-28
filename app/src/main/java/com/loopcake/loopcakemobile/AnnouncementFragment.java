@@ -112,7 +112,7 @@ public class AnnouncementFragment extends LCExpandableFragment<Announcement> imp
                 Announcement announcement = new Announcement(announcementID,title,date,content,course_id);
                 items.add(announcement);
                 LCDatabaseHelper helper = new LCDatabaseHelper(getActivity());
-                helper.insertAnnouncement(announcementID,course_id,title,content,date);
+                helper.insertAnnouncement(announcement);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

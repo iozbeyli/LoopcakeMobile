@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 
 public class Repo {
-    public final String position;
+
     public final String repoName;
     public final String repoID;
     public boolean isRepoPersonal;
@@ -25,20 +25,28 @@ public class Repo {
     public String currentBranch;
     public String currentSha;
 
-    public Repo(String position, String repoName, String repoID) {
-        this.position = position;
+    public Repo(String repoName, String repoID,String currentBranch,String currentSha) {
         this.repoName = repoName;
         this.repoID = repoID;
+        this.currentBranch = currentBranch;
+        this.currentSha =currentSha;
     }
-
 
 
     @Override
     public String toString() {
         return "Repo{" +
-                "position='" + position + '\'' +
-                ", repoName='" + repoName + '\'' +
+                "repoName='" + repoName + '\'' +
                 ", repoID='" + repoID + '\'' +
+                ", isRepoPersonal=" + isRepoPersonal +
+                ", tags=" + tags +
+                ", branchPointers=" + branchPointers +
+                ", collaborators=" + collaborators +
+                ", membersJSONArray=" + membersJSONArray +
+                ", members=" + members +
+                ", files=" + files +
+                ", currentBranch='" + currentBranch + '\'' +
+                ", currentSha='" + currentSha + '\'' +
                 '}';
     }
 }

@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.LCDatabase.LCDatabaseHelper;
+import com.loopcake.loopcakemobile.LCDatabase.LCNetworkChecker;
 import com.loopcake.loopcakemobile.LCList.LCListFragment;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
 import com.loopcake.loopcakemobile.PostDatas.PostDatas;
@@ -30,8 +32,14 @@ public class RepoListFragment extends LCListFragment<Repo> implements Communicat
 
     @Override
     protected void fillList() {
-        AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, RepoPostDatas.getRepoListPostData(),this);
-        asyncCommunicationTask.execute((Void) null);
+        if(LCNetworkChecker.isNetworkConnected(getActivity())){
+            AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, RepoPostDatas.getRepoListPostData(),this);
+            asyncCommunicationTask.execute((Void) null);
+        }else{
+            LCDatabaseHelper helper = new LCDatabaseHelper(getActivity());
+            displayList(helper.getRepos(),R.layout.fragment_item);
+        }
+
     }
 
     @Override
@@ -57,7 +65,6 @@ public class RepoListFragment extends LCListFragment<Repo> implements Communicat
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     public void failedExecute(){
@@ -69,9 +76,13 @@ public class RepoListFragment extends LCListFragment<Repo> implements Communicat
             JSONObject repo = null;
             try {
                 repo = repos.getJSONObject(i);
+                Log.d("Repo",repo.toString());
                 String repoName = repo.getString("name");
                 String repoID = repo.getString("id");
-                repoList.add(new Repo(""+i,repoName,repoID));
+                Repo temp = new Repo(repoName,repoID,null,null);
+                repoList.add(temp);
+                LCDatabaseHelper helper = new LCDatabaseHelper(getActivity());
+                helper.insertRepo(temp);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
