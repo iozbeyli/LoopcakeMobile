@@ -15,6 +15,7 @@ import com.loopcake.loopcakemobile.LCExpandableList.Announcement;
 import com.loopcake.loopcakemobile.LCExpandableList.LCExpandableFragment;
 import com.loopcake.loopcakemobile.LCExpandableList.Project;
 import com.loopcake.loopcakemobile.LCList.LCListFragment;
+import com.loopcake.loopcakemobile.LCList.LCListItems.Course;
 import com.loopcake.loopcakemobile.PostDatas.CoursePostDatas;
 import com.loopcake.loopcakemobile.PostDatas.PostDatas;
 
@@ -86,37 +87,6 @@ public class ProjectListFragment extends LCListFragment<Project> implements Comm
         ((TextView)itemView.findViewById(R.id.content)).setText(item.title);
     }
 
-    /*@Override
-    public void setGroupView(View groupView, Project item) {
-        TextView title = (TextView)groupView.findViewById(R.id.project_title);
-        //TextView deadline = (TextView) groupView.findViewById(R.id.project_deadline);
-        title.setTypeface(null, Typeface.BOLD);
-        title.setText(item.title);
-        //deadline.setText(item.deadline);
-    }
-
-    @Override
-    public void setChildView(View childView, Project item, int childPosition) {
-        //ProgressBar progressBar = (ProgressBar)childView.findViewById(R.id.project_progress_bar);
-        TextView projectDetail = (TextView)childView.findViewById(R.id.project_content);
-        //progressBar.setProgress(item.getPoints());
-        projectDetail.setText(item.title);
-    }
-
-    @Override
-    public void onGroupClicked(Project item) {
-
-    }
-
-    @Override
-    public int getChildrenCount(Project item) {
-        return 1;
-    }
-
-    @Override
-    public void onChildClicked(Project item) {
-        showProject(item.id);
-    }*/
 
     @Override
     public void successfulExecute(JSONObject jsonObject) {
@@ -129,7 +99,11 @@ public class ProjectListFragment extends LCListFragment<Project> implements Comm
                 JSONArray details = jsonObject.getJSONArray("details");
                 final ArrayList<Project> projects = new ArrayList<Project>();
                 for(int i=0;i<details.length();i++){
-                    final String courseID = details.getJSONObject(i).getString("_id");
+                    String courseID = details.getJSONObject(i).getString("_id");
+                    String courseName = details.getJSONObject(i).getString("name");
+                    String courseCode = details.getJSONObject(i).getString("code");
+                    String courseIns = details.getJSONObject(i).getString("instructor");
+                    final Course course = new Course("",courseName,courseID,courseCode,"","",courseIns);
                     post.put("courseid",courseID);
                     AsyncCommunicationTask async = new AsyncCommunicationTask(Constants.apiURL + "/getProject",
                             post, new Communicator() {
@@ -140,7 +114,7 @@ public class ProjectListFragment extends LCListFragment<Project> implements Comm
                                 announcements = jsonObject.getJSONArray("details");
                                 Boolean successBool = (Boolean)jsonObject.get("success");
                                 if(successBool) {
-                                    projects.addAll(createProjectList(announcements,courseID));
+                                    projects.addAll(createProjectList(announcements,course));
                                     items = projects;
                                     displayList(items,R.layout.fragment_item);
                                 }
@@ -184,13 +158,16 @@ public class ProjectListFragment extends LCListFragment<Project> implements Comm
     }
 
 
-    private ArrayList<Project> createProjectList(JSONArray announcements, String course) {
+    private ArrayList<Project> createProjectList(JSONArray announcements, Course course) {
         ArrayList<Project> items=new ArrayList<>();
         for(int i=0;i<announcements.length();i++){
             try {
                 String name= announcements.getJSONObject(i).getString("name");
                 String id =announcements.getJSONObject(i).getString("_id");
-                Project tempProject = new Project(id,name,"",null,course);
+                String deadline =announcements.getJSONObject(i).getString("deadline");
+                String details =announcements.getJSONObject(i).getString("details");
+                JSONArray attachments =announcements.getJSONObject(i).getJSONArray("attachment");
+                Project tempProject = new Project(id,name,deadline,null,course, details, attachments);
                 items.add(tempProject);
             } catch (JSONException e) {
                 e.printStackTrace();

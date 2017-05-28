@@ -41,7 +41,7 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
     protected void fillList() {
         try {
             JSONObject post = new JSONObject();
-            post.put("courseid", Session.project.course);
+            post.put("courseid", Session.project.course.courseid);
             post.put("projectid", Session.project.id);
             AsyncCommunicationTask task = new AsyncCommunicationTask(Constants.apiURL+"/getNonGroup",post,this);
             task.execute((Void)null);
@@ -52,7 +52,7 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
                 public void onClick(View v) {
                     JSONObject post = new JSONObject();
                     try {
-                        post.put("courseid", Session.project.course);
+                        post.put("courseid", Session.project.course.courseid);
                         post.put("projectid", Session.project.id);
                         post.put("name", editName.getText());
                         post.put("students", new JSONArray(selectedIDs));
@@ -85,7 +85,7 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
     private void createGroup(){
         try {
             JSONObject post = new JSONObject();
-            post.put("courseid", Session.project.course);
+            post.put("courseid", Session.project.course.courseid);
             post.put("projectid", Session.project.id);
             post.put("name", "myGroup");
             post.put("maxGroupSize", Session.project.maxSize);

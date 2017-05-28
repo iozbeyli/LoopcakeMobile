@@ -60,7 +60,7 @@ public class CourseStudentFragment extends LCListFragment<User> implements Commu
 
     @Override
     public void setLayoutID() {
-
+        layoutID = R.layout.fragment_course_student;
     }
 
     @Override

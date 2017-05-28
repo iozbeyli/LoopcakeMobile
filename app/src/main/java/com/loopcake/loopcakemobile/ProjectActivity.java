@@ -1,15 +1,10 @@
 package com.loopcake.loopcakemobile;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
@@ -18,17 +13,11 @@ import com.loopcake.loopcakemobile.Enumerators.Enumerators;
 import com.loopcake.loopcakemobile.PostDatas.GroupPostDatas;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static android.graphics.Typeface.BOLD;
-import static com.loopcake.loopcakemobile.Enumerators.Enumerators.CourseActions.ADD_STUDENTS;
-import static com.loopcake.loopcakemobile.Enumerators.Enumerators.CourseActions.CREATE_ANNOUNCEMENT;
-import static com.loopcake.loopcakemobile.Enumerators.Enumerators.CourseActions.CREATE_PROJECT;
-import static com.loopcake.loopcakemobile.Enumerators.Enumerators.CourseActions.EDIT_COURSE;
 import static com.loopcake.loopcakemobile.Enumerators.Enumerators.ProjectActions.CREATE_GROUP;
 import static com.loopcake.loopcakemobile.Enumerators.Enumerators.ProjectActions.GROUP_MEMBER;
 
@@ -49,7 +38,7 @@ public class ProjectActivity extends LCTabbedActivity implements Communicator {
         fragments.add(clFragment);
         ProjectDetailFragment projectDetailFragment = new ProjectDetailFragment();
         fragments.add(projectDetailFragment);
-        ProjectAttachmentFragment projectAttachmentFragment = new ProjectAttachmentFragment();
+        ProjectSubmissionFragment projectAttachmentFragment = new ProjectSubmissionFragment();
         fragments.add(projectAttachmentFragment);
         pageTitles.add("Progress");
         pageTitles.add("Details");
