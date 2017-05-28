@@ -1,5 +1,6 @@
 package com.loopcake.loopcakemobile;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,9 @@ public class SubCourseActivity extends AppCompatActivity {
     private static String TAG = "SubCourse";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(getResources().getBoolean(R.bool.portrait_only)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_course);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -1,10 +1,13 @@
 package com.loopcake.loopcakemobile;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.Space;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
@@ -32,6 +35,12 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
 
     @Override
     public void onCreateFunction() {
+        if(getResources().getBoolean(R.bool.tablet_view)){
+            space_tab = (android.widget.Space) findViewById(R.id.tab_space);
+            space_tab.setVisibility(View.VISIBLE);
+            frame_tab = (FrameLayout)findViewById(R.id.tabbed_frame);
+            frame_tab.setVisibility(View.VISIBLE);
+        }
         if(LCNetworkChecker.isNetworkConnected(getApplicationContext())){
             AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, RepoPostDatas.getRepoDetailsPostData(Session.selectedRepo.repoID),this);
             asyncCommunicationTask.execute((Void) null);
