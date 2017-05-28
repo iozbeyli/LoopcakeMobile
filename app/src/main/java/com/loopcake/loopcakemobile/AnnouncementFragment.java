@@ -7,6 +7,8 @@ import android.widget.TextView;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.Enumerators.Enumerators;
+import com.loopcake.loopcakemobile.LCDatabase.LCDatabaseHelper;
+import com.loopcake.loopcakemobile.LCDatabase.LCNetworkChecker;
 import com.loopcake.loopcakemobile.LCExpandableList.Announcement;
 import com.loopcake.loopcakemobile.LCExpandableList.LCExpandableFragment;
 import com.loopcake.loopcakemobile.PostDatas.AnnouncementPostDatas;
@@ -33,8 +35,17 @@ public class AnnouncementFragment extends LCExpandableFragment<Announcement> imp
     @Override
     public void fillList() {
         loaderController.showProgress(true);
-        mAuthTask = new AsyncCommunicationTask(Constants.getAnnounceURL, AnnouncementPostDatas.getAnnouncementPostData(announcementType),this);
-        mAuthTask.execute((Void) null);
+        if(LCNetworkChecker.isNetworkConnected(getActivity())){
+            mAuthTask = new AsyncCommunicationTask(Constants.getAnnounceURL, AnnouncementPostDatas.getAnnouncementPostData(announcementType),this);
+            mAuthTask.execute((Void) null);
+        }else{
+            loaderController.showProgress(true);
+            LCDatabaseHelper helper = new LCDatabaseHelper(getActivity());
+            items = helper.getUserAnnouncements();
+            loaderController.showProgress(false);
+            displayList(R.layout.announcement_group_item,R.layout.announcement_child_item);
+        }
+
     }
 
     @Override
@@ -73,7 +84,7 @@ public class AnnouncementFragment extends LCExpandableFragment<Announcement> imp
             Boolean successBool = (Boolean)jsonObject.get("success");
             JSONObject announcement = announcements.getJSONObject(0);
             String title = (String)announcement.get("title");
-            Log.d("title",title);
+            Log.d("Announcement",jsonObject.toString());
             if(successBool){
                 createAnnouncementList(announcements);
                 displayList(R.layout.announcement_group_item,R.layout.announcement_child_item);
@@ -92,11 +103,16 @@ public class AnnouncementFragment extends LCExpandableFragment<Announcement> imp
         items =new ArrayList<>();
         for(int i=0;i<announcements.length();i++){
             try {
+                String announcementID = announcements.getJSONObject(i).getString("_id");
                 String title =announcements.getJSONObject(i).getString("title");
                 String date = announcements.getJSONObject(i).getString("date");
                 String content = announcements.getJSONObject(i).getString("content");
-                Announcement announcement = new Announcement(title,date,content);
+                JSONObject course = announcements.getJSONObject(i).getJSONObject("course");
+                String course_id = course.getString("_id");
+                Announcement announcement = new Announcement(announcementID,title,date,content,course_id);
                 items.add(announcement);
+                LCDatabaseHelper helper = new LCDatabaseHelper(getActivity());
+                helper.insertAnnouncement(announcementID,course_id,title,content,date);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
