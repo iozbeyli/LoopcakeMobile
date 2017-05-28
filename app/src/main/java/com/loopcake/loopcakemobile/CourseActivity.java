@@ -46,7 +46,6 @@ public class CourseActivity extends LCTabbedActivity {
     @Override
     public SectionsPagerAdapter createSectionPagerAdapter(){
         setTitle(Session.selectedCourse.name);
-        NotificationHandler.sendNotificationToCourse(Session.selectedCourse.courseid, "test", "course");
         ArrayList<Fragment> fragments = new ArrayList<>();
         ArrayList<String> pageTitles = new ArrayList<>();
         fragments.add(new CourseDetailFragment());

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.AsyncCommunication.NotificationHandler;
 import com.loopcake.loopcakemobile.LCFragment.LCFragment;
 import com.loopcake.loopcakemobile.PostDatas.AnnouncementPostDatas;
 
@@ -32,14 +33,15 @@ public class CreateAnnouncementFragment extends LCFragment {
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title    = ((EditText)layout.findViewById(R.id.edit_title))  .getText().toString();
+                final String title    = ((EditText)layout.findViewById(R.id.edit_title)).getText().toString();
                 String content  = ((EditText)layout.findViewById(R.id.edit_content)).getText().toString();
                 AsyncCommunicationTask comm = new AsyncCommunicationTask(Constants.apiURL+"/announce",
                         AnnouncementPostDatas.createAnnouncementPostData(title, content), new Communicator() {
                     @Override
                     public void successfulExecute(JSONObject jsonObject) {
                         but.setFocusable(false);
-                        Snackbar.make(layout, "Project Created!", 1000).show();
+                        NotificationHandler.sendNotificationToCourse(Session.selectedCourse.courseid, "New Announcement", title);
+                        Snackbar.make(layout, "Announcement Created!", 1000).show();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {

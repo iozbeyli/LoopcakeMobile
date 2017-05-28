@@ -14,11 +14,15 @@ import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.LCFragment.LCFragment;
+import com.loopcake.loopcakemobile.LCList.LCListItems.ChecklistItem;
 import com.loopcake.loopcakemobile.PostDatas.AnnouncementPostDatas;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -27,12 +31,35 @@ import java.util.Date;
 
 public class CreateProjectFragment extends LCFragment {
     private final static String TAG = "CreateProject";
+    ArrayList<Checkpoint> checks = new ArrayList<>();
 
     public CreateProjectFragment(){
         layoutID = R.layout.fragment_create_project;
     }
     @Override
     public void mainFunction() {
+        final EditText ch_label = (EditText) layout.findViewById(R.id.edit_check_label);
+        final EditText ch_point = (EditText) layout.findViewById(R.id.edit_check_point);
+        final TextView ch_content = (TextView) layout.findViewById(R.id.check_content);
+        ((Button) layout.findViewById(R.id.check_add)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String label = ch_label.getText().toString();
+                int point = Integer.parseInt(ch_point.getText().toString());
+                Checkpoint ch = new Checkpoint(label,point);
+                checks.add(ch);
+                ch_content.append(ch.toString()+"\n");
+            }
+        });
+        ((Button) layout.findViewById(R.id.check_clear)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checks.clear();
+                ch_content.setText("");
+            }
+        });
+
+
         final JSONObject post = new JSONObject();
         Button datePicker = (Button)layout.findViewById(R.id.picker_date);
         final TextView label = (TextView) layout.findViewById(R.id.label_deadline);
@@ -82,16 +109,41 @@ public class CreateProjectFragment extends LCFragment {
                         @Override
                         public void successfulExecute(JSONObject jsonObject) {
                             but.setFocusable(false);
-                            Snackbar.make(layout, "Project Created!", 1000).show();
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {CreateProjectFragment.this.getActivity().finish();}
-                            }, 1000);
+                            if(!checks.isEmpty()){
+                                try {
+                                    Log.d(TAG, "Creating Checklist");
+                                    createChecklist(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }else{
+                                Snackbar.make(layout, "Project Created!", 1000).show();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {CreateProjectFragment.this.getActivity().finish();}
+                                }, 1000);
+                            }
+
                         }
 
                         @Override
                         public void failedExecute() {
                             Snackbar.make(layout, "Project Creation Failed!", Snackbar.LENGTH_LONG).show();
+                        }
+
+                        private void createChecklist(JSONObject jsonObject) throws JSONException {
+                            JSONObject post = new JSONObject();
+                            post.put("operation", "1");
+                            post.put("projectid", jsonObject.getString("id"));
+                            JSONArray ch_array = new JSONArray();
+                            for (Checkpoint ch:checks) {
+                                ch_array.put(ch.getJSON());
+                            }
+                            checks.clear();
+                            post.put("checkpoints", ch_array);
+
+                            AsyncCommunicationTask task = new AsyncCommunicationTask(Constants.apiURL+"/updateChecklist", post, this);
+                            task.execute((Void) null);
                         }
                     });
 
@@ -100,5 +152,25 @@ public class CreateProjectFragment extends LCFragment {
 
             }
         });
+    }
+
+    private class Checkpoint{
+        private String label;
+        private int point;
+        private Checkpoint(String label, int point){
+            this.label = label;
+            this.point = point;
+        }
+        private JSONObject getJSON() throws JSONException {
+            JSONObject obj = new JSONObject();
+            obj.put("label", label);
+            obj.put("point", point);
+            return obj;
+        }
+
+        @Override
+        public String toString() {
+            return label + " (" + point + " points)";
+        }
     }
 }

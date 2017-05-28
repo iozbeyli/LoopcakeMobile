@@ -4,6 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
+
     <TextView
         android:id="@+id/label_name"
         android:layout_width="match_parent"
@@ -47,6 +48,62 @@
             android:ems="10"
             android:inputType="numberSigned" />
 
+    <TextView
+        android:id="@+id/check_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Checklist"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/check_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_check_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:hint="Label" />
+
+        <EditText
+            android:id="@+id/edit_check_point"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="Point"
+            android:inputType="numberSigned" />
+
+        <Button
+            android:id="@+id/check_add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:text="Add"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_weight="2"
+            android:layout_margin="5dp"/>
+
+        <Button
+            android:id="@+id/check_clear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_red_dark"
+            android:text="Clear"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_weight="2"
+            android:layout_margin="5dp"/>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -67,13 +124,14 @@
             android:id="@+id/picker_date"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
             android:background="@color/colorAccent"
             android:text="Select Deadline"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/label_deadline"
+            android:layout_marginStart="39dp" />
     </RelativeLayout>
 
     <Button
