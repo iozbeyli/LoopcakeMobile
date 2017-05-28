@@ -1,6 +1,7 @@
 package com.loopcake.loopcakemobile.LCElements;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -49,6 +50,9 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
     private boolean fabsOpen=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(getResources().getBoolean(R.bool.portrait_only)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         super.onCreate(savedInstanceState);
         subFabs = new FloatingActionButton[3];
         subFabTexts = new TextView[3];
