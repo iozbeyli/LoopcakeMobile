@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.loopcake.loopcakemobile.LCDatabase.LCDatabaseHelper;
 import com.loopcake.loopcakemobile.LCFragment.LCFragment;
 import com.loopcake.loopcakemobile.R;
 import com.loopcake.loopcakemobile.Session;
@@ -62,4 +63,5 @@ public class RepoCodeFragment extends LCFragment {
             return filename;
         }
     }
+
 }

@@ -9,7 +9,10 @@ import android.util.Log;
 
 import com.loopcake.loopcakemobile.LCExpandableList.Announcement;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
-import com.loopcake.loopcakemobile.R;
+import com.loopcake.loopcakemobile.RepoFragments.LCFile;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -70,7 +73,10 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
                     + "BRANCH_NAME TEXT, "
                     + "NAME TEXT, "
                     + "CODE TEXT, "
-                    + "UNIQUE(REPO_ID, BRANCH_NAME)"
+                    + "JSON TEXT, "
+                    + "PATH TEXT, "
+                    + "PARENT TEXT, "
+                    + "UNIQUE(REPO_ID, BRANCH_NAME, PATH)"
                     + ");"
             );
             db.execSQL("CREATE TABLE COURSE ( _id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -149,7 +155,7 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             //Get the drink details from the cursor
             while (!cursor.isAfterLast()) {
-                Log.d("Found announcement",cursor.getString(0));
+                Log.d("Found repo",cursor.getString(0));
                 String repo_id = cursor.getString(0);
                 String name = cursor.getString(1);
                 String current_branch = cursor.getString(2);
@@ -163,7 +169,114 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         db.close();
+        Log.d("Returned repo list",repos.toString());
         return repos;
+    }
+
+    public Repo getRepo(String repoID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Repo repo=null;
+        Cursor cursor = db.query("REPO",new String[]{"REPO_ID","NAME","CURRENT_BRANCH", "CURRENT_SHA"},"REPO_ID = ?",new String[]{repoID},null,null,null);
+        if (cursor.moveToFirst()) {
+            //Get the drink details from the cursor
+            while (!cursor.isAfterLast()) {
+                Log.d("Found announcement",cursor.getString(0));
+                String repo_id = cursor.getString(0);
+                String name = cursor.getString(1);
+                String current_branch = cursor.getString(2);
+                String current_sha = cursor.getString(3);
+                repo = new Repo(name,repo_id,current_branch,current_sha);
+                cursor.moveToNext();
+            }
+        }
+        if(cursor!=null && !cursor.isClosed()){
+            cursor.close();
+        }
+        db.close();
+        return repo;
+    }
+
+    public void insertFile(LCFile file){
+        Log.d("inserting file",file.toString());
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("REPO_ID",file.repo_id);
+        values.put("BRANCH_NAME",file.branch_name);
+        values.put("NAME",file.name);
+        if(file.code!=null){
+            values.put("CODE",file.code);
+        }
+        if(file.parent!=null){
+            values.put("PARENT",file.parent.name);
+        }
+        values.put("PATH",file.path);
+        values.put("JSON",file.json);
+        db.insertWithOnConflict("FILE",null,values,SQLiteDatabase.CONFLICT_REPLACE);
+        db.close();
+    }
+
+    public ArrayList<LCFile> getFileList(String repoID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<LCFile> values=new ArrayList<>();
+        Cursor cursor = db.query("FILE",new String[]{"REPO_ID","BRANCH_NAME","NAME","CODE","PATH","JSON","PARENT"},"REPO_ID = ? AND PARENT is null or PARENT = ?",new String[] {repoID,""},null,null,null);
+        if (cursor.moveToFirst()) {
+            //Get the drink details from the cursor
+            while (!cursor.isAfterLast()) {
+                Log.d("Found announcement",cursor.getString(0));
+                String repo_id = cursor.getString(0);
+                String branch_name = cursor.getString(1);
+                String name = cursor.getString(2);
+                String code = cursor.getString(3);
+                String path = cursor.getString(4);
+                String json = cursor.getString(5);
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    LCFile temp = LCFile.newLCFile(jsonObject,null,repo_id,branch_name);
+                    values.add(temp);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                cursor.moveToNext();
+            }
+        }
+        if(cursor!=null && !cursor.isClosed()){
+            cursor.close();
+        }
+        db.close();
+        return values;
+    }
+    public LCFile getFile(SQLiteDatabase db,String repoID,String branchName,String pathToSearch){
+        LCFile temp = null;
+        Cursor cursor = db.query("FILE",new String[]{"REPO_ID","BRANCH_NAME","NAME","CODE","PATH","JSON","PARENT"},"REPO_ID = ? AND PATH = ? AND BRANCH_NAME = ?",new String[] {repoID,pathToSearch,branchName},null,null,null);
+        if (cursor.moveToFirst()) {
+            //Get the drink details from the cursor
+            while (!cursor.isAfterLast()) {
+                Log.d("Found file",""+cursor.getString(2)+":"+cursor.getString(3));
+                String repo_id = cursor.getString(0);
+                String branch_name = cursor.getString(1);
+                String name = cursor.getString(2);
+                String code = cursor.getString(3);
+
+                String path = cursor.getString(4);
+                String json = cursor.getString(5);
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    temp = LCFile.newLCFile(jsonObject,null,repo_id,branch_name);
+                    temp.code=code;
+                    temp.path=path;
+                    temp.name=name;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                cursor.moveToNext();
+            }
+        }
+        if(cursor!=null && !cursor.isClosed()){
+            cursor.close();
+        }
+        return temp;
     }
 
 }

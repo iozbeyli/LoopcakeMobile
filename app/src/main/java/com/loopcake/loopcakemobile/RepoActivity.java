@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.LCDatabase.LCDatabaseHelper;
+import com.loopcake.loopcakemobile.LCDatabase.LCNetworkChecker;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
 import com.loopcake.loopcakemobile.PostDatas.RepoPostDatas;
 import com.loopcake.loopcakemobile.RepoFragments.LCFile;
@@ -30,8 +32,17 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
 
     @Override
     public void onCreateFunction() {
-        AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, RepoPostDatas.getRepoDetailsPostData(Session.selectedRepo.repoID),this);
-        asyncCommunicationTask.execute((Void) null);
+        if(LCNetworkChecker.isNetworkConnected(getApplicationContext())){
+            AsyncCommunicationTask asyncCommunicationTask = new AsyncCommunicationTask(Constants.getRepoURL, RepoPostDatas.getRepoDetailsPostData(Session.selectedRepo.repoID),this);
+            asyncCommunicationTask.execute((Void) null);
+        }else{
+            LCDatabaseHelper helper = new LCDatabaseHelper(getApplicationContext());
+            Repo atDatabase = helper.getRepo(Session.selectedRepo.repoID);
+            Session.selectedRepo = atDatabase;
+            Session.selectedRepo.files = helper.getFileList(atDatabase.repoID);
+            setTabView();
+        }
+
     }
 
     @Override
@@ -91,6 +102,7 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
     public void successfulExecute(JSONObject jsonObject) {
         Log.d("repo response",jsonObject.toString());
         try {
+            Log.d("Repo Activity",jsonObject.toString());
             JSONArray repoDetailArray = jsonObject.getJSONArray("details");
             JSONObject repoDetails = repoDetailArray.getJSONObject(0);
             Repo temp = Session.selectedRepo;
@@ -106,19 +118,23 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
                 public void successfulExecute(JSONObject jsonObject) {
                     Log.d("Repo Files response",jsonObject.toString());
                     try {
+                        LCDatabaseHelper helper = new LCDatabaseHelper(getApplicationContext());
+                        Session.selectedRepo.currentSha=jsonObject.getString("head");
+                        Session.selectedRepo.currentBranch =jsonObject.getString("branch");
                         JSONArray filesJSONArray = jsonObject.getJSONArray("details");
                         ArrayList<LCFile> repoFiles = new ArrayList<>();
                         for(int i=0;i<filesJSONArray.length();i++){
                             JSONObject fileJSONObject = filesJSONArray.getJSONObject(i);
-                            LCFile file = LCFile.newLCFile(fileJSONObject,null);
+                            LCFile file = LCFile.newLCFile(fileJSONObject,null,Session.selectedRepo.repoID,Session.selectedRepo.currentBranch);
                             if(file!=null){
                                 repoFiles.add(file);
                             }
                         }
                         Session.selectedRepo.files=repoFiles;
-                        Session.selectedRepo.currentSha=jsonObject.getString("head");
-                        Session.selectedRepo.currentBranch =jsonObject.getString("branch");
+
+                        helper.insertRepo(Session.selectedRepo);
                         setTabView();
+
                         //reverseAllFiles();
 
                     } catch (JSONException e) {

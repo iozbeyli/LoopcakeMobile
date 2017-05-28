@@ -2,8 +2,11 @@ package com.loopcake.loopcakemobile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +19,8 @@ import android.widget.TextView;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.Enumerators.Enumerators;
+import com.loopcake.loopcakemobile.LCDatabase.LCDatabaseHelper;
+import com.loopcake.loopcakemobile.LCDatabase.LCNetworkChecker;
 import com.loopcake.loopcakemobile.LCFragment.LCFragment;
 import com.loopcake.loopcakemobile.PostDatas.RepoPostDatas;
 import com.loopcake.loopcakemobile.RepoFragments.LCFile;
@@ -32,8 +37,12 @@ public class RepoFilesFragment extends LCFragment{
     ArrayList<LCFile> files;
     Drawable file;
     Drawable folder;
+    Drawable notAvailableFile;
     ArrayList<View> views;
     LinearLayout insertPoint;
+    LCDatabaseHelper helper;
+    SQLiteDatabase db;
+    Boolean connected = true;
     private class RepoFileView{
         public ArrayList<RepoFileView> subViews;
         public View view;
@@ -69,11 +78,25 @@ public class RepoFilesFragment extends LCFragment{
         views = new ArrayList<>();
         folder = ContextCompat.getDrawable(getActivity(),R.drawable.ic_stat_folder);
         file=ContextCompat.getDrawable(getActivity(),R.drawable.ic_stat_file);
+        notAvailableFile=ContextCompat.getDrawable(getActivity(),R.drawable.not_file);
         folder.setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
         file.setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
-        if(Session.selectedRepo.files!=null){
-            displayFiles(Session.selectedRepo.files,0,insertPoint);
-        }
+        notAvailableFile.setColorFilter(ContextCompat.getColor(getActivity(),R.color.gray_holo_dark), PorterDuff.Mode.MULTIPLY);
+            if(Session.selectedRepo.files!=null){
+                connected = LCNetworkChecker.isNetworkConnected(getContext());
+                if(!connected){
+                    helper = new LCDatabaseHelper(getContext());
+                    db = helper.getReadableDatabase();
+                    displayFiles(Session.selectedRepo.files,0,insertPoint);
+                    db.close();
+                }else{
+                    displayFiles(Session.selectedRepo.files,0,insertPoint);
+                }
+
+
+            }
+
+
 
 
     }
@@ -86,31 +109,45 @@ public class RepoFilesFragment extends LCFragment{
     }
 
     public void clickOnFile(final RepoFileView item){
-        if(item.file.fileType== Enumerators.FileType.FILE){
-            AsyncCommunicationTask fileContentComm = new AsyncCommunicationTask(Constants.getFileContentURL, RepoPostDatas.getRepoFileContentPostData(Session.selectedRepo.repoID, Session.user.userID, item.file.path), new Communicator() {
-                @Override
-                public void successfulExecute(JSONObject jsonObject) {
-                    Log.d("code",jsonObject.toString());
-                    try {
-                        JSONObject fileDetails = jsonObject.getJSONObject("details");
-                        item.file.code = fileDetails.getString("data");
-                        Session.selectedFile = item.file;
-                        RepoActivity activity = (RepoActivity) getActivity();
-                        activity.viewCodeFile();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+        if(connected){
+            if(item.file.fileType== Enumerators.FileType.FILE){
+                AsyncCommunicationTask fileContentComm = new AsyncCommunicationTask(Constants.getFileContentURL, RepoPostDatas.getRepoFileContentPostData(Session.selectedRepo.repoID, Session.user.userID, item.file.path), new Communicator() {
+                    @Override
+                    public void successfulExecute(JSONObject jsonObject) {
+                        Log.d("code",jsonObject.toString());
+                        try {
+                            JSONObject fileDetails = jsonObject.getJSONObject("details");
+                            item.file.code = fileDetails.getString("data");
+                            Session.selectedFile = item.file;
+                            RepoActivity activity = (RepoActivity) getActivity();
+                            activity.viewCodeFile();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
 
-                @Override
-                public void failedExecute() {
+                    @Override
+                    public void failedExecute() {
 
-                }
-            });
-            fileContentComm.execute((Void)null);
+                    }
+                });
+                fileContentComm.execute((Void)null);
+            }else{
+                item.displaySubViews();
+            }
         }else{
-            item.displaySubViews();
+            if(item.file.code==null){
+                if(item.file.fileType== Enumerators.FileType.FILE){
+                    Snackbar.make(layout, "File not available", 1000).show();
+                }else{
+                    item.displaySubViews();
+                }
+            }else{
+                RepoActivity activity = (RepoActivity) getActivity();
+                activity.viewCodeFile();
+            }
         }
+
 
     }
 
@@ -126,6 +163,12 @@ public class RepoFilesFragment extends LCFragment{
         ImageView iv = (ImageView) v.findViewById(R.id.repo_file_child_image);
         switch (item.fileType){
             case FILE:
+                if(!connected){
+                    LCFile temp = helper.getFile(db,item.repo_id,item.branch_name,item.path);
+                    if(temp!=null){
+                        Log.d("Returned file",temp.toString());
+                    }
+                }
                 iv.setImageDrawable(file);
                 break;
             case FOLDER:
@@ -139,6 +182,7 @@ public class RepoFilesFragment extends LCFragment{
                 clickOnFile(repoFileView);
             }
         });
+
         v.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
