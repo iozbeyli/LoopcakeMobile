@@ -2,6 +2,10 @@ package com.loopcake.loopcakemobile.LCExpandableList;
 
 import android.util.Pair;
 
+import com.loopcake.loopcakemobile.LCList.LCListItems.Course;
+
+import org.json.JSONArray;
+
 import java.util.HashMap;
 
 /**
@@ -12,16 +16,21 @@ public class Project {
     public String id;
     public String title;
     public String deadline;
+    public String details;
     public HashMap<String,Pair<Boolean,Integer>> checklist;
-    public String course;
+    public Course course;
     public int maxSize;
+    public JSONArray attachments;
 
-    public Project(String id, String title, String deadline, HashMap<String,Pair<Boolean,Integer>> checklist,String course){
+    public Project(String id, String title, String deadline,
+                   HashMap<String,Pair<Boolean,Integer>> checklist,Course course, String details, JSONArray attachments){
         this.id=id;
         this.deadline=deadline;
         this.title = title;
         this.checklist=checklist;
-        this.course=course;
+        this.course =course;
+        this.details = details;
+        this.attachments = attachments;
     }
 
     public int getPoints(){
