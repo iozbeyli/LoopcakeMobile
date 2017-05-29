@@ -23,6 +23,7 @@ import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.CourseActivity;
 import com.loopcake.loopcakemobile.CourseListFragment;
+import com.loopcake.loopcakemobile.LCDatabase.LCNetworkChecker;
 import com.loopcake.loopcakemobile.LoginActivity;
 import com.loopcake.loopcakemobile.ProjectListFragment;
 import com.loopcake.loopcakemobile.R;
@@ -102,6 +103,9 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             ft.commit();
             closeSubFabs();
+            if(!LCNetworkChecker.isNetworkConnected(this)){
+                Snackbar.make(findViewById(R.id.drawer_layout),"Offline Viewing",Snackbar.LENGTH_INDEFINITE).show();
+            }
             onCreateFunction();
         }
     }
@@ -173,7 +177,7 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        
+
 
         return super.onOptionsItemSelected(item);
     }

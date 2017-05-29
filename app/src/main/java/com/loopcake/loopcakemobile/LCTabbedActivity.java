@@ -3,6 +3,7 @@ package com.loopcake.loopcakemobile;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.widget.Space;
@@ -15,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.LCDatabase.LCNetworkChecker;
 import com.loopcake.loopcakemobile.TabbedActivities.SectionsPagerAdapter;
 import com.loopcake.loopcakemobile.TabbedActivities.SubFabController;
 
@@ -78,7 +80,9 @@ public abstract class LCTabbedActivity extends AppCompatActivity{
         if(!(this instanceof Communicator)){
             setTabView();
         }
-
+        if(!LCNetworkChecker.isNetworkConnected(this)){
+            Snackbar.make(findViewById(R.id.main_content),"Offline Viewing",Snackbar.LENGTH_INDEFINITE).show();
+        }
         onCreateFunction();
 
 
