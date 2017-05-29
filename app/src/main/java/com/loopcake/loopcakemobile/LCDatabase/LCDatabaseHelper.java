@@ -148,8 +148,7 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public ArrayList<Repo> getRepos(){
-        SQLiteDatabase db = this.getReadableDatabase();
+    public ArrayList<Repo> getRepos(SQLiteDatabase db){
         ArrayList<Repo> repos=new ArrayList<>();
         Cursor cursor = db.query("REPO",new String[]{"REPO_ID","NAME","CURRENT_BRANCH", "CURRENT_SHA"},null,null,null,null,null);
         if (cursor.moveToFirst()) {
@@ -168,13 +167,11 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
         if(cursor!=null && !cursor.isClosed()){
             cursor.close();
         }
-        db.close();
         Log.d("Returned repo list",repos.toString());
         return repos;
     }
 
-    public Repo getRepo(String repoID){
-        SQLiteDatabase db = this.getReadableDatabase();
+    public Repo getRepo(SQLiteDatabase db,String repoID){
         Repo repo=null;
         Cursor cursor = db.query("REPO",new String[]{"REPO_ID","NAME","CURRENT_BRANCH", "CURRENT_SHA"},"REPO_ID = ?",new String[]{repoID},null,null,null);
         if (cursor.moveToFirst()) {
@@ -192,13 +189,14 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
         if(cursor!=null && !cursor.isClosed()){
             cursor.close();
         }
-        db.close();
         return repo;
     }
 
-    public void insertFile(LCFile file){
-        Log.d("inserting file",file.toString());
-        SQLiteDatabase db = this.getWritableDatabase();
+    public void updateFile(SQLiteDatabase db,LCFile file){
+        db.execSQL("UPDATE FILE SET CODE = "+file.code+" WHERE NAME="+file.name+" AND BRANCH_NAME = "+file.branch_name+" AND REPO_ID = "+file.repo_id);
+    }
+
+    public void insertFile(SQLiteDatabase db,LCFile file){
         ContentValues values = new ContentValues();
         values.put("REPO_ID",file.repo_id);
         values.put("BRANCH_NAME",file.branch_name);
@@ -212,11 +210,9 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
         values.put("PATH",file.path);
         values.put("JSON",file.json);
         db.insertWithOnConflict("FILE",null,values,SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
     }
 
-    public ArrayList<LCFile> getFileList(String repoID){
-        SQLiteDatabase db = this.getReadableDatabase();
+    public ArrayList<LCFile> getFileList(SQLiteDatabase db,String repoID){
         ArrayList<LCFile> values=new ArrayList<>();
         Cursor cursor = db.query("FILE",new String[]{"REPO_ID","BRANCH_NAME","NAME","CODE","PATH","JSON","PARENT"},"REPO_ID = ? AND PARENT is null or PARENT = ?",new String[] {repoID,""},null,null,null);
         if (cursor.moveToFirst()) {
@@ -246,9 +242,9 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return values;
     }
-    public LCFile getFile(SQLiteDatabase db,String repoID,String branchName,String pathToSearch){
-        LCFile temp = null;
-        Cursor cursor = db.query("FILE",new String[]{"REPO_ID","BRANCH_NAME","NAME","CODE","PATH","JSON","PARENT"},"REPO_ID = ? AND PATH = ? AND BRANCH_NAME = ?",new String[] {repoID,pathToSearch,branchName},null,null,null);
+    public ArrayList<LCFile> getFiles(SQLiteDatabase db,String branchName,String repoID){
+        ArrayList<LCFile> values=new ArrayList<>();
+        Cursor cursor = db.query("FILE",new String[]{"REPO_ID","BRANCH_NAME","NAME","CODE","PATH","JSON","PARENT"},"REPO_ID = ?  AND BRANCH_NAME = ?",new String[] {repoID,branchName},null,null,null);
         if (cursor.moveToFirst()) {
             //Get the drink details from the cursor
             while (!cursor.isAfterLast()) {
@@ -261,11 +257,13 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
                 String path = cursor.getString(4);
                 String json = cursor.getString(5);
                 try {
+
                     JSONObject jsonObject = new JSONObject(json);
-                    temp = LCFile.newLCFile(jsonObject,null,repo_id,branch_name);
+                    LCFile temp = LCFile.newLCFile(jsonObject,null,repo_id,branch_name);
                     temp.code=code;
                     temp.path=path;
                     temp.name=name;
+                    values.add(temp);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -276,7 +274,7 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
         if(cursor!=null && !cursor.isClosed()){
             cursor.close();
         }
-        return temp;
+        return values;
     }
 
 }

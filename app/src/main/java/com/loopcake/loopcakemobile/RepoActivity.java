@@ -2,6 +2,7 @@ package com.loopcake.loopcakemobile;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.Space;
@@ -46,9 +47,11 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
             asyncCommunicationTask.execute((Void) null);
         }else{
             LCDatabaseHelper helper = new LCDatabaseHelper(getApplicationContext());
-            Repo atDatabase = helper.getRepo(Session.selectedRepo.repoID);
+            SQLiteDatabase db = helper.getReadableDatabase();
+            Repo atDatabase = helper.getRepo(db,Session.selectedRepo.repoID);
             Session.selectedRepo = atDatabase;
-            Session.selectedRepo.files = helper.getFileList(atDatabase.repoID);
+            Session.selectedRepo.files = helper.getFileList(db,atDatabase.repoID);
+            db.close();
             setTabView();
         }
 

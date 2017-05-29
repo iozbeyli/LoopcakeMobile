@@ -1,6 +1,7 @@
 package com.loopcake.loopcakemobile;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -37,7 +38,8 @@ public class RepoListFragment extends LCListFragment<Repo> implements Communicat
             asyncCommunicationTask.execute((Void) null);
         }else{
             LCDatabaseHelper helper = new LCDatabaseHelper(getActivity());
-            displayList(helper.getRepos(),R.layout.fragment_item);
+            SQLiteDatabase db = helper.getReadableDatabase();
+            displayList(helper.getRepos(db),R.layout.fragment_item);
         }
 
     }

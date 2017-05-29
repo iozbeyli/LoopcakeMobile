@@ -71,19 +71,4 @@ public class LCFile {
         return null;
     }
 
-    @Override
-    public String toString() {
-        return "LCFile{" +
-                "name='" + name + '\'' +
-                ", children=" + children +
-                ", fileType=" + fileType +
-                ", listed=" + listed +
-                ", path='" + path + '\'' +
-                ", code='" + code + '\'' +
-                ", repo_id='" + repo_id + '\'' +
-                ", branch_name='" + branch_name + '\'' +
-                ", json='" + json + '\'' +
-                ", parent=" + parent +
-                '}';
-    }
 }
