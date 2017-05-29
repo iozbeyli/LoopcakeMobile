@@ -13,6 +13,7 @@ import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
+import com.loopcake.loopcakemobile.AsyncCommunication.NotificationHandler;
 import com.loopcake.loopcakemobile.LCFragment.LCFragment;
 import com.loopcake.loopcakemobile.LCList.LCListItems.ChecklistItem;
 import com.loopcake.loopcakemobile.PostDatas.AnnouncementPostDatas;
@@ -117,6 +118,7 @@ public class CreateProjectFragment extends LCFragment {
                                     e.printStackTrace();
                                 }
                             }else{
+                                NotificationHandler.sendNotificationToCourse(Session.selectedCourse.courseid, "New Project", Session.selectedCourse.name);
                                 Snackbar.make(layout, "Project Created!", 1000).show();
                                 new Handler().postDelayed(new Runnable() {
                                     @Override

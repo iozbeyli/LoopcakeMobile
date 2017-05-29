@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.AsyncCommunication.ImageDownloaderTask;
+import com.loopcake.loopcakemobile.AsyncCommunication.NotificationHandler;
 import com.loopcake.loopcakemobile.LCList.LCListFragment;
 import com.loopcake.loopcakemobile.PostDatas.CoursePostDatas;
 
@@ -72,9 +73,10 @@ public class GroupMemberFragment extends LCListFragment<User> implements Communi
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
                         JSONObject post = new JSONObject();
+
                         try {
                             JSONArray students = Session.selectedGroup.getJSONArray("students");
-                            String[] selected = input.getText().toString().split(",");
+                            final String[] selected = input.getText().toString().split(",");
                             int max = Session.project.maxSize;
                             if((students.length()+selected.length)>max){
                                 Snackbar.make(layout,"Max group size is "+max, Snackbar.LENGTH_SHORT).show();
@@ -85,13 +87,15 @@ public class GroupMemberFragment extends LCListFragment<User> implements Communi
                             //post.put("maxGroupSize", max);
                             post.put("groupid",Session.selectedGroup.getString("_id"));
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                         AsyncCommunicationTask task = new AsyncCommunicationTask(Constants.apiURL + "/addMember",
                                 post, new Communicator() {
                             @Override
                             public void successfulExecute(JSONObject jsonObject) {
+                                try {
+                                    NotificationHandler.sendNotificationToUser(selected, "New Group", "You have been added to a group named "+ Session.selectedGroup.getString("name"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 Intent intent = new Intent(getActivity(),ProjectActivity.class);
                                 startActivity(intent);
                             }
@@ -102,6 +106,9 @@ public class GroupMemberFragment extends LCListFragment<User> implements Communi
                             }
                         });
                         task.execute((Void) null);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 });
