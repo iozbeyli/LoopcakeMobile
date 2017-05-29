@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.loopcake.loopcakemobile.AsyncCommunication.AsyncCommunicationTask;
 import com.loopcake.loopcakemobile.AsyncCommunication.Communicator;
 import com.loopcake.loopcakemobile.AsyncCommunication.ImageDownloaderTask;
+import com.loopcake.loopcakemobile.AsyncCommunication.NotificationHandler;
 import com.loopcake.loopcakemobile.LCList.LCListFragment;
 import com.loopcake.loopcakemobile.ListContents.StudentSelect;
 
@@ -65,6 +66,7 @@ public class CreateGroupFragment extends LCListFragment<StudentSelect> implement
                         public void successfulExecute(JSONObject jsonObject) {
                             Toast.makeText(getContext(),jsonObject.toString(),Toast.LENGTH_LONG).show();
                             Session.selectedID = Session.project.id;
+                            NotificationHandler.sendNotificationToUser(selectedIDs.toArray(new String[selectedIDs.size()]), "New Group", "You have been added to a group name "+ editName.getText());
                             Intent intent = new Intent(getActivity(),ProjectActivity.class);
                             startActivity(intent);
                         }
