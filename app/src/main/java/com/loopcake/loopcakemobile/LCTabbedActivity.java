@@ -70,7 +70,7 @@ public abstract class LCTabbedActivity extends AppCompatActivity{
         subFabLayouts.add(findViewById(R.id.fabSub2Layout));
         subFabLayouts.add(findViewById(R.id.fabSub3Layout));
         subFabsView = findViewById(R.id.fabSubs);
-        subFabController = new SubFabController(subFabs,subFabTexts,subFabLayouts,subFabsView);
+        subFabController = new SubFabController(subFabs,subFabTexts,subFabLayouts,subFabsView,fabMain);
         subFabController.setTextListForFragments(setTextListsForFragments());
         subFabController.setListenerListForFragments(setListenerListsForFragments());
         subFabController.setSubFabs(0);
@@ -127,9 +127,6 @@ public abstract class LCTabbedActivity extends AppCompatActivity{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

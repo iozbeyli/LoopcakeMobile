@@ -86,7 +86,7 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
             subFabLayouts[0] =  findViewById(R.id.fabSub1Layout);
             subFabLayouts[1] =  findViewById(R.id.fabSub2Layout);
             subFabLayouts[2] =  findViewById(R.id.fabSub3Layout);
-
+            fabMain.setVisibility(View.GONE);
             drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawerLayout.setDrawerListener(actionBarDrawerToggle);
@@ -173,11 +173,7 @@ public abstract class LCDrawerActivity extends AppCompatActivity implements Navi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this,CourseActivity.class);
-            startActivity(intent);
-            return true;
-        }
+        
 
         return super.onOptionsItemSelected(item);
     }

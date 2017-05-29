@@ -78,11 +78,9 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
     public ArrayList<ArrayList<String>> setTextListsForFragments() {
         ArrayList<ArrayList<String>> fragmentTextLists=new ArrayList<>();
         ArrayList<String> fabTexts = new ArrayList<>();
-        fabTexts.add("Naber");
         fragmentTextLists.add(fabTexts);
         fragmentTextLists.add(fabTexts);
         ArrayList<String> fabTexts3 = new ArrayList<>();
-        fabTexts.add("Create Branch");
         fragmentTextLists.add(fabTexts3);
         return fragmentTextLists;
     }
@@ -91,21 +89,9 @@ public class RepoActivity extends LCTabbedActivity implements Communicator{
     public ArrayList<ArrayList<View.OnClickListener>> setListenerListsForFragments() {
         ArrayList<ArrayList<View.OnClickListener>> fragmentListenerLists = new ArrayList<>();
         ArrayList<View.OnClickListener> listeners = new ArrayList<>();
-        listeners.add(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("faa","a");
-            }
-        });
         fragmentListenerLists.add(listeners);
         fragmentListenerLists.add(listeners);
         ArrayList<View.OnClickListener> listeners3 = new ArrayList<>();
-        listeners.add(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("faa","a");
-            }
-        });
         fragmentListenerLists.add(listeners3);
         return fragmentListenerLists;
     }

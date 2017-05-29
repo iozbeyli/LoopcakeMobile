@@ -21,11 +21,13 @@ public class SubFabController {
     private ArrayList<TextView> textOfFabs;
     private ArrayList<View> subFabLayouts;
     private View subFabsView;
-    public SubFabController(ArrayList<FloatingActionButton> floatingActionButtons, ArrayList<TextView> textOfFabs,ArrayList<View> subFabLayouts,View subFabView){
+    private FloatingActionButton mainFab;
+    public SubFabController(ArrayList<FloatingActionButton> floatingActionButtons, ArrayList<TextView> textOfFabs,ArrayList<View> subFabLayouts,View subFabView,FloatingActionButton mainButton){
         this.floatingActionButtons=floatingActionButtons;
         this.textOfFabs=textOfFabs;
         this.subFabLayouts =subFabLayouts;
         this.subFabsView=subFabView;
+        this.mainFab=mainButton;
         closeSubFabs();
     }
 
@@ -55,6 +57,11 @@ public class SubFabController {
         for(int i = 0;i<texts.size();i++){
             textOfFabs.get(i).setText(texts.get(i));
             floatingActionButtons.get(i).setOnClickListener(listeners.get(i));
+        }
+        if(numberOfFabs==0){
+            mainFab.setVisibility(View.GONE);
+        }else{
+            mainFab.setVisibility(View.VISIBLE);
         }
     }
 
