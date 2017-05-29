@@ -209,7 +209,9 @@ public class RepoFilesFragment extends LCFragment{
     public LCFile doesExistInDatabase(LCFile item){
         for(int i=0;i<files.size();i++){
             if(item.path.equals(files.get(i).path)){
-                return files.get(i);
+                LCFile temp = files.get(i);
+                files.remove(i);
+                return temp;
             }
         }
         return null;

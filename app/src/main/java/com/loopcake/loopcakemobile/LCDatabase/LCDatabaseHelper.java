@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.loopcake.loopcakemobile.LCExpandableList.Announcement;
 import com.loopcake.loopcakemobile.LCList.LCListItems.Repo;
+import com.loopcake.loopcakemobile.RepoFragments.Branch;
 import com.loopcake.loopcakemobile.RepoFragments.LCFile;
 
 import org.json.JSONException;
@@ -65,8 +66,10 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
                     + ");"
             );
             db.execSQL("CREATE TABLE BRANCH (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + "REPO_ID TEXT"
-                    + "NAME TEXT );"
+                    + "REPO_ID TEXT, "
+                    + "NAME TEXT, "
+                    + "HISTORY_JSON TEXT "
+                    +");"
             );
             db.execSQL("CREATE TABLE FILE (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + "REPO_ID TEXT, "
@@ -268,6 +271,35 @@ public class LCDatabaseHelper extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
 
+                cursor.moveToNext();
+            }
+        }
+        if(cursor!=null && !cursor.isClosed()){
+            cursor.close();
+        }
+        return values;
+    }
+
+    public void insertBranch(SQLiteDatabase db,Branch branch){
+        ContentValues values = new ContentValues();
+        values.put("REPO_ID",branch.repo_id);
+        values.put("NAME",branch.name);
+        values.put("HISTORY_JSON",branch.history_response);
+
+        db.insertWithOnConflict("BRANCH",null,values,SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public ArrayList<Branch> getBranchList(SQLiteDatabase db,String repoID){
+        ArrayList<Branch> values=new ArrayList<>();
+        Cursor cursor = db.query("BRANCH",new String[]{"REPO_ID","NAME","HISTORY_JSON"},"REPO_ID = ? ",new String[] {repoID},null,null,null);
+        if (cursor.moveToFirst()) {
+            //Get the drink details from the cursor
+            while (!cursor.isAfterLast()) {
+                String repo_id = cursor.getString(0);
+                String branch_name = cursor.getString(1);
+                String history_json = cursor.getString(2);
+                Branch temp = new Branch(branch_name,repo_id,history_json);
+                values.add(temp);
                 cursor.moveToNext();
             }
         }
